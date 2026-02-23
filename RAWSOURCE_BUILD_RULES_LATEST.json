@@ -1,0 +1,556 @@
+{
+  "_README": "RAWSOURCE BUILD RULES — Compact single-file reference for all page generation. This file replaces the 30KB transfer doc for active building sessions. The master JSON (v8.2, 1095 chemicals) remains the DATA source; this file is the RULES source.",
+  "_version": "1.0",
+  "_date": "2026-02-22",
+
+  "company": {
+    "name": "RawSource",
+    "legal": "RawSource Inc.",
+    "domain": "rawsource.com",
+    "location": "Fort Lauderdale, FL",
+    "type": "Specialty chemical distributor — bulk only (pallets, totes, isotanks, tankers)",
+    "NOT": ["consumer brand", "formulator", "cosmetic e-commerce", "Shopify store"],
+    "tone": "Industrial vendor portal — serious, technical, structured"
+  },
+
+  "brand": {
+    "colors": {
+      "navy_dark":    "#0C1E3D",
+      "navy":         "#1F4788",
+      "navy_deep":    "#152F5C",
+      "navy_light":   "#2B5BA0",
+      "navy_wash":    "#F0F4FA",
+      "gold":         "#E9A72D",
+      "gold_hover":   "#D49530",
+      "gold_soft_bg": "#FEF6E8",
+      "white":        "#FFFFFF",
+      "off_white":    "#FAFBFD",
+      "surface":      "#F4F6F9",
+      "surface_alt":  "#EDF0F5",
+      "text_primary": "#1A1F2E",
+      "text_secondary":"#4A5568",
+      "text_muted":   "#7B8599",
+      "text_on_dark": "rgba(255,255,255,0.85)",
+      "border":       "#D6DCE6",
+      "border_light": "#E8ECF2",
+      "badge_green":  "#2D8A4E",
+      "badge_green_bg":"#E8F5ED",
+      "badge_amber":  "#B8860B",
+      "badge_amber_bg":"#FEF6E8"
+    },
+    "WRONG_colors_never_use": {
+      "old_gold": "#E8A838",
+      "old_navy": "#0F2440"
+    },
+    "fonts": {
+      "primary": "'Plus Jakarta Sans', -apple-system, sans-serif",
+      "mono": "'IBM Plex Mono', 'SF Mono', monospace",
+      "WRONG_never_use": ["DM Sans", "JetBrains Mono"]
+    },
+    "typography": {
+      "hero_h1":    { "font": "Plus Jakarta Sans", "weight": 800, "size": "38px" },
+      "section_h2": { "font": "Plus Jakarta Sans", "weight": 700, "size": "24px" },
+      "card_title": { "font": "Plus Jakarta Sans", "weight": 700, "size": "15px" },
+      "body":       { "font": "Plus Jakarta Sans", "weight": 400, "size": "14px" },
+      "button":     { "font": "Plus Jakarta Sans", "weight": 700, "size": "13px" },
+      "nav":        { "font": "Plus Jakarta Sans", "weight": 500, "size": "13px" },
+      "card_desc":  { "font": "Plus Jakarta Sans", "weight": 400, "size": "12px" },
+      "eyebrow":    { "font": "IBM Plex Mono", "weight": 500, "size": "11px", "transform": "uppercase", "tracking": "1.2px" },
+      "chip_badge": { "font": "Plus Jakarta Sans", "weight": "600-700", "size": "10px", "transform": "uppercase" },
+      "cas_formula":{ "font": "IBM Plex Mono", "weight": "400-600", "size": "12px" }
+    },
+    "mono_only_for": ["eyebrows", "CAS numbers", "molecular formulas", "technical data values", "code"],
+    "logo": {
+      "description": "Hexagonal RS icon in gold/amber gradient — transparent PNG, RGBA, 320x58px",
+      "format": "PNG with alpha channel (color type 6 = RGBA). Confirmed transparent.",
+      "embed_method": "ALWAYS base64 data URI inside an <img> tag. Never use <svg>, never use background-image, never use external URL.",
+      "source_file": "logo_base64.txt in GitHub repo (30582 chars including data:image/png;base64, prefix)",
+      "source_of_truth": "The EXACT base64 string from calcium-carbonate-FINAL.html line 101 (header) and line 248 (footer)",
+
+      "HEADER_RULES": {
+        "tag": "<img src=\"data:image/png;base64,{LOGO_B64}\" alt=\"RawSource\" style=\"height:24px;display:block\">",
+        "height": "24px",
+        "display": "block (removes inline image gap)",
+        "parent": "<a href=\"https://rawsource.com\" class=\"logo\">",
+        "background": "Logo sits on #0C1E3D navy dark header — transparency makes gold icon float on dark bg"
+      },
+      "FOOTER_RULES": {
+        "tag": "<img src=\"data:image/png;base64,{LOGO_B64}\" alt=\"RawSource\" style=\"height:20px\">",
+        "height": "20px",
+        "background": "Same #0C1E3D navy dark footer"
+      },
+
+      "NEVER_DO": [
+        "NEVER generate or recreate the logo — always use the exact base64 string",
+        "NEVER use a white/black background behind the logo — it is transparent PNG and must stay that way",
+        "NEVER convert to SVG, JPEG, or any other format",
+        "NEVER use CSS background-image to place the logo — always <img> tag",
+        "NEVER change the aspect ratio — only set height, let width auto-scale",
+        "NEVER put the logo on a light background without testing visibility first",
+        "NEVER set width explicitly — only height (24px header, 20px footer)",
+        "NEVER add border, box-shadow, or any visual effects to the logo img"
+      ],
+
+      "ALWAYS_DO": [
+        "ALWAYS copy the full base64 string exactly — do not truncate or modify",
+        "ALWAYS include alt=\"RawSource\" for accessibility",
+        "ALWAYS set display:block on header logo to prevent inline gaps",
+        "ALWAYS place logo inside an <a> link to homepage in header",
+        "ALWAYS use the same base64 string for both header and footer — they are identical"
+      ],
+
+      "TESTED_BACKGROUNDS": {
+        "#0C1E3D_navy_dark": "✅ PRIMARY — header and footer. Gold icon pops on dark navy.",
+        "#152F5C_navy_deep": "✅ Works well",
+        "#1F4788_navy_brand": "✅ Works well",
+        "#000000_black": "✅ Works",
+        "#FFFFFF_white": "✅ Works — visible on white",
+        "#FAFBFD_offwhite": "✅ Works",
+        "#F4F6F9_surface": "✅ Works",
+        "#E9A72D_gold": "❌ DOES NOT WORK — gold logo on gold background is invisible. NEVER place logo on gold background. If a section uses gold bg, use a dark container for the logo or omit it."
+      }
+    },
+    "voice": {
+      "style": "Confident, technical, zero fluff. Every sentence carries information.",
+      "audience": "Enterprise industrial buyers who know MDEA, HEDP, xanthate",
+      "chemical_formatting": "H₂S not H2S; CAS numbers in mono font",
+      "banned_words": ["innovative", "world-class", "cutting-edge", "synergy", "leverage", "solutions (as noun)"],
+      "preferred_words": ["raw materials", "intermediates", "chemistries", "products"],
+      "no_emoji": true,
+      "no_exclamation_marks_in_body": true
+    }
+  },
+
+  "taxonomy": {
+    "_RULE": "LOCKED. No new values without explicit JP approval. No variations, synonyms, or free text.",
+
+    "material_families_18": [
+      "Acids & Salts",
+      "Amines & Amides",
+      "Esters",
+      "Glycols & Polyols",
+      "Mineral Fillers & Pigments",
+      "Natural Extracts & Oils",
+      "Phosphate Esters & Derivatives",
+      "Polymers & Resins",
+      "Silanes & Organosilanes",
+      "Silicone Fluids & Oils",
+      "Solvents - Aliphatic",
+      "Solvents - Aromatic",
+      "Solvents - Oxygenated",
+      "Specialty Additives",
+      "Surfactants - Amphoteric",
+      "Surfactants - Anionic",
+      "Surfactants - Cationic",
+      "Surfactants - Nonionic"
+    ],
+
+    "functional_roles_25": [
+      "Biocidal Action",
+      "Chelation / Sequestration",
+      "Cleaning / Degreasing",
+      "Color / Pigmentation",
+      "Conditioning",
+      "Corrosion Inhibition",
+      "Coupling / Adhesion Promotion",
+      "Crosslinking / Curing",
+      "Defoaming / Foam Control",
+      "Emolliency",
+      "Film Formation",
+      "Flame Retardancy",
+      "Lubrication",
+      "Moisture Control",
+      "Plasticizing",
+      "Preservation",
+      "Scale Inhibition",
+      "Slip / Release",
+      "Solvency",
+      "Surfactancy",
+      "Thickening / Rheology",
+      "UV Protection",
+      "Viscosity Modification",
+      "Wetting",
+      "pH Adjustment"
+    ],
+
+    "industries_13": [
+      "Agriculture",
+      "Beauty & Personal Care",
+      "Coatings & Construction",
+      "Food & Beverage",
+      "HI&I Cleaning",
+      "Industrial Manufacturing",
+      "Lubricants",
+      "Mining",
+      "Oil & Gas",
+      "Pharmaceuticals",
+      "Plastics & Polymers",
+      "Textiles",
+      "Water Treatment"
+    ]
+  },
+
+  "data_rules": {
+    "zero_hallucination": "NEVER invent CAS numbers, descriptions, functional roles, classifications, or any chemical data",
+    "empty_fields": "If data doesn't exist, the field stays EMPTY — never fill with assumptions",
+    "classification_source": "Deterministic mappings from PubChem + CosIng — NOT AI guesses",
+    "conditional_rendering": {
+      "hero_stats": "Only show boxes where data exists",
+      "ghs_card": "Only render if signal_word OR pictograms exist",
+      "un_box": "Only render if pubchem_un_number is non-empty",
+      "physical_props": "Only render properties that have values",
+      "abbreviation": "Only show if abbreviations[] is non-empty"
+    }
+  },
+
+  "site_architecture": {
+    "base_url": "https://rawsource.com",
+    "tech_stack": "Static HTML, inlined CSS, vanilla JS. NO React/Vue/Angular.",
+    "pages": {
+      "homepage": { "path": "/", "status": "NOT BUILT" },
+      "catalog":  { "path": "/shop", "status": "IN PROGRESS — needs v5 template rebuild with correct branding" },
+      "products": { "path": "/product/{slug}/", "status": "DONE — 1094 pages", "count": 1095 },
+      "industries": {
+        "agriculture":              { "path": "/industries/agriculture/",              "status": "COMPLETE — reference implementation" },
+        "oil_gas":                  { "path": "/industries/oil-gas-mining/",           "status": "Landing done, inner pages partial" },
+        "beauty_personal_care":     { "path": "/industries/beauty-personal-care/",     "status": "Landing + inner pages done" },
+        "coatings_construction":    { "path": "/industries/coatings-construction/",    "status": "NOT STARTED" },
+        "water_treatment":          { "path": "/industries/water-treatment/",          "status": "NOT STARTED" },
+        "textiles":                 { "path": "/industries/textiles/",                 "status": "NOT STARTED" },
+        "hii_cleaning":             { "path": "/industries/hii-cleaning/",             "status": "NOT STARTED" },
+        "lubricants":               { "path": "/industries/lubricants/",               "status": "NOT STARTED" },
+        "plastics_polymers":        { "path": "/industries/plastics-polymers/",        "status": "NOT STARTED" },
+        "food_beverage":            { "path": "/industries/food-beverage/",            "status": "NOT STARTED" },
+        "pharmaceuticals":          { "path": "/industries/pharmaceuticals/",          "status": "NOT STARTED" },
+        "industrial_manufacturing": { "path": "/industries/industrial-manufacturing/", "status": "NOT STARTED" },
+        "mining":                   { "path": "/industries/mining/",                   "status": "NOT STARTED — currently combined with Oil & Gas" }
+      }
+    },
+    "industry_page_pattern": {
+      "door_a": "What problem are you solving? → Application segments → Process problems → Chemical solutions",
+      "door_b": "Browse by product family → Family cards with chemical count → Detail pages filtered by industry + subsystem",
+      "door_c": "Procurement support → 6 service cards (TDS/SDS, Spec Matching, Bulk Packaging, Regulatory, Multi-Site, Emergency) → Intake forms → RFQ pipeline"
+    }
+  },
+
+  "seo_preservation": {
+    "_CRITICAL": "ZERO SEO PROGRESS MAY BE LOST. Every new page must lay perfectly on top of the existing rawsource.com WordPress/WooCommerce infrastructure. No URL changes. No broken links. No orphaned pages.",
+
+    "wordpress_infrastructure": {
+      "platform": "WordPress + WooCommerce on rawsource.com",
+      "deployment": "New HTML pages replace existing WordPress pages at the SAME URLs. Old pages stay live until new ones are verified."
+    },
+
+    "live_url_map_LOCKED": {
+      "_note": "These are the ACTUAL URLs live on rawsource.com RIGHT NOW. Our new pages MUST use these EXACT paths.",
+
+      "product_pages": {
+        "pattern": "/product/{woocommerce-slug}/",
+        "count": 1095,
+        "rule": "885 chemicals have existing WooCommerce source_url — those slugs are LOCKED FOREVER. NEVER change an existing slug.",
+        "canonical": "<link rel='canonical' href='https://rawsource.com/product/{slug}/'>",
+        "example": "/product/hydrofluoric-acid/"
+      },
+
+      "catalog": "/shop/",
+
+      "industry_hub": "/industries/",
+
+      "industry_landing_pages_MUST_MATCH": {
+        "oil_and_gas":             "/industries/oil-and-gas/",
+        "agriculture":             "/industries/agriculture/",
+        "beauty_and_personal_care": "/industries/beauty-and-personal-care/",
+        "coatings_and_construction":"/industries/coatings-and-construction/",
+        "textiles":                "/industries/textiles/",
+        "lubricants":              "/industries/lubricants/",
+        "water_treatment":         "/industries/water-treatment/",
+        "hii_cleaning":            "/home-care-institutional-industrial-cleaning/"
+      },
+
+      "WRONG_dev_slugs_NEVER_USE": {
+        "oil-gas-mining": "WRONG — live site uses /industries/oil-and-gas/",
+        "beauty-personal-care": "WRONG — live site uses /industries/beauty-and-personal-care/",
+        "coatings-construction": "WRONG — live site uses /industries/coatings-and-construction/",
+        "hii-cleaning": "WRONG — live site uses /home-care-institutional-industrial-cleaning/"
+      },
+
+      "existing_industry_sub_pages_KEEP_OR_REDIRECT": {
+        "_rule": "These pages are LIVE and INDEXED. They must either stay live or get 301 redirected to the new equivalent Door A/B page.",
+        "oil_gas": ["/antifoam/", "/gas-sweetening/"],
+        "agriculture": ["/the-right-ingredients-for-your-agricultural-needs/", "/biotechnology-and-genetic-engineering/", "/nutrition-products-for-crops/"],
+        "beauty": ["/skin-care/", "/color-and-makeup/", "/hair-care/", "/leading-cosmetic-ingredients-supplier-premium-skincare-actives/"],
+        "coatings": ["/paints-and-graphic-ink/", "/construction/", "/roof-coatings/"],
+        "textiles": ["/textile-finishing/", "/textile-softening/", "/textile-waterproofing/"],
+        "lubricants": ["/industrial-machinery-ensuring-reliability/", "/marine-protecting-against-corrosion/", "/energy-optimizing-performance/"],
+        "water": ["/coagulation-and-flocculation-in-water-treatment/", "/water-disinfection-ensuring-safe-and-clean-water/", "/ph-adjustment-in-water-treatment-balancing-act-for-quality-water/"],
+        "hii": ["/automotive/", "/bathroom/", "/hard-surface/"]
+      },
+
+      "existing_category_pages_KEEP_OR_REDIRECT": [
+        "/product-category/amines/",
+        "/product-category/acids/",
+        "/product-category/sodium-salts/",
+        "/product-category/Alcohol/",
+        "/product-category/Esters/",
+        "/product-category/Solvents/",
+        "/product-category/Surfactants/",
+        "/product-category/silicones/silanes/"
+      ],
+
+      "new_industries_no_existing_url": {
+        "plastics_polymers": "/industries/plastics-polymers/",
+        "food_beverage": "/industries/food-beverage/",
+        "pharmaceuticals": "/industries/pharmaceuticals/",
+        "industrial_manufacturing": "/industries/industrial-manufacturing/",
+        "mining": "/industries/mining/"
+      },
+
+      "DO_NOT_TOUCH": ["/services/", "/services/supply-chain/", "/services/blending/", "/technical-support-for-chemical-products/", "/order-now/", "/contact-us/", "/outsourcing/", "/sourcing-and-importing-chemicals/"]
+    },
+
+    "seo_rules_non_negotiable": [
+      "NEVER change an existing URL slug — new page goes at the SAME URL the old page lives at",
+      "EVERY page: canonical tag, Schema.org structured data, unique <title>, unique <meta description>",
+      "EVERY product page preserves its WooCommerce slug exactly",
+      "Existing sub-pages must stay live OR get 301 redirects — NEVER just delete",
+      "Internal links use absolute URLs: https://rawsource.com{path}",
+      "Breadcrumbs reflect actual URL hierarchy",
+      "WooCommerce pages stay live as fallback until Google Search Console confirms indexing",
+      "sitemap.xml regenerated after every deployment batch",
+      "Monitor rankings for 30 days before removing any fallback page"
+    ]
+  },
+
+  "product_page_field_map": {
+    "title_tag":      "product_name + abbreviation + CAS",
+    "family_badge":   "material_family",
+    "h1":             "product_name",
+    "abbreviation":   "abbreviations[0] (if exists) OR inci_name",
+    "cas_formula_mw": "cas_number + pubchem_molecular_formula + pubchem_molecular_weight",
+    "hero_desc":      "description",
+    "hero_stats":     "GHS signal word, UN number, density, melting point (CONDITIONAL — only if data exists)",
+    "func_roles":     "functional_roles[] → navy wash tags",
+    "industries":     "industry (split on ';') OR industries[] → green wash tags",
+    "phys_props":     "pubchem_physical_properties (CONDITIONAL — only properties with values)",
+    "ghs_safety":     "pubchem_ghs (CONDITIONAL — hide entire card if no data)",
+    "chem_identity":  "cas_number, pubchem_molecular_formula, pubchem_molecular_weight, pubchem_iupac_name, pubchem_inchi_key, pubchem_cid",
+    "synonyms":       "Filter to human-readable names only (EXCLUDE: SCHEMBL, UNII, InChI keys, numeric codes)",
+    "related":        "Same material_family + same top industry, limit 4",
+    "breadcrumbs":    "Home > Catalog > {material_family} > {product_name}"
+  },
+
+  "json_schema_key_fields": {
+    "_note": "These are the CRITICAL fields from the master JSON that drive page generation",
+    "identity": ["product_name", "cas_number", "cas_status", "molecular_formula", "description"],
+    "classification": ["material_family", "functional_roles", "industry", "industries", "classification_confidence"],
+    "pubchem": ["pubchem_cid", "pubchem_molecular_formula", "pubchem_molecular_weight", "pubchem_iupac_name", "pubchem_inchi_key", "pubchem_physical_properties", "pubchem_ghs", "pubchem_un_number"],
+    "cosing": ["inci_name", "cosing_functions", "cosing_mapped_roles"],
+    "display": ["synonyms", "abbreviations", "source_url", "trade_name_references"],
+    "subsystems": ["oil_gas_subsystem", "mining_subsystem", "agriculture_subsystem", "textiles_subsystem", "hii_subsystem", "plastics_subsystem", "industrial_mfg_subsystem", "coatings_chemistry_family"],
+    "audit": ["review_flags", "classification_confidence", "roles_confidence"]
+  },
+
+  "previous_mistakes_NEVER_repeat": [
+    "ChatGPT batch classification: 76.9% unclassified, 100% enum violations",
+    "DM Sans font: WRONG — ALL industry templates still have this. Must be Plus Jakarta Sans",
+    "Gold #E8A838: WRONG — ALL industry templates still have this. Must be #E9A72D",
+    "RS square placeholder logo: WRONG — ALL industry templates still have this. Must use base64 PNG",
+    "Â° encoding artifacts: UTF-8 mojibake in WooCommerce descriptions. Must sanitize on render",
+    "Availability badges (Verified/Likely/Sourcing): REJECTED — these were taxonomy confidence, not inventory",
+    "Logo with black background: REJECTED — must use transparent PNG",
+    "Table-based catalog: REJECTED — must use card grid with sidebar filters"
+  ],
+
+  "page_hierarchy": {
+    "_overview": "Every industry follows the SAME 4-level page hierarchy. The STRUCTURE is identical across all 13 industries — only the DATA changes.",
+
+    "level_1_industry_landing": {
+      "path": "/industries/{industry-slug}/",
+      "purpose": "Main entry point for an industry. Tabs give 3 doors into the content.",
+      "template_references": ["agriculture-v1__3_.html", "oil-gas-mining-v2__2_.html", "beauty-personal-care-v2__1_.html"],
+      "structure": {
+        "header": "Global site header with base64 logo (24px), nav links, search",
+        "breadcrumbs": "Home > Industries > {Industry Name}",
+        "hero": {
+          "layout": "2-column grid: text left (h1, tagline, stat chips, CTAs) + photo right",
+          "h1": "Industry name only — no fluff",
+          "tagline": "1-2 sentences, what RawSource supplies for this industry",
+          "stat_chips": "3 chips: X Unique Chemistries, Y Product Families, Z Application Segments",
+          "ctas": "Primary: Request Bulk Quote (gold). Secondary: Browse Product Families (ghost)",
+          "photo": "Industry-specific image with label overlay. PLACEHOLDER OK for now — photos come later"
+        },
+        "tab_bar": {
+          "position": "Sticky below header (top: 56px)",
+          "tabs": [
+            {"id": "overview", "label": "Overview", "icon": "grid"},
+            {"id": "problems", "label": "Process Problems", "door": "A", "icon": "question-circle"},
+            {"id": "families", "label": "Product Families", "door": "B", "icon": "package"},
+            {"id": "procurement", "label": "Procurement Support", "door": "C", "icon": "truck"}
+          ]
+        },
+        "panel_overview": {
+          "layout": "2-column: text left + photo right",
+          "content": "Industry description, supply category pills that link to Door B segments",
+          "cta_row": "Request Quote + Download Catalog"
+        },
+        "panel_door_a": {
+          "label": "What problem are you solving?",
+          "eyebrow": "Door A (mono, uppercase)",
+          "segment_toggle": "Pill buttons that filter by application segment (e.g., Row Crops, Specialty Crops, Livestock)",
+          "content": "Tile grid of process problems. Each tile = title + 1-line desc + 'View solutions →'",
+          "tile_links_to": "Level 2 solution detail page (/industries/{slug}/problems/{problem-id}/)"
+        },
+        "panel_door_b": {
+          "label": "Product Families",
+          "eyebrow": "Door B (mono, uppercase)",
+          "segment_toggle": "Same segments as Door A",
+          "content": "Family cards with: badge (Available/Sourcing), family name, description, role chips, chemistry count + preview (top 3 with CAS in mono), 'View family →'",
+          "card_links_to": "Level 3 family detail page (/industries/{slug}/products/{family-slug}/)"
+        },
+        "panel_door_c": {
+          "label": "Procurement Support",
+          "eyebrow": "Door C (mono, uppercase)",
+          "content": "3-column grid of 6 service cards: TDS/SDS Library, Spec Matching, Bulk Packaging, Regulatory, Multi-Site Delivery, Emergency Sourcing",
+          "cards": "Icon + title + 1-line desc + 'Get started →'"
+        },
+        "rfq_sidebar": "Fixed right panel (collapsible). Fields: Chemical, CAS, Volume, Packaging, Application segment, Name, Email, Company. Advanced: Destination, Incoterms",
+        "footer_cta": "Full-width navy dark bar: 'Discuss Your {Industry} Requirements' + Submit RFQ button + Contact link"
+      }
+    },
+
+    "level_2_solution_detail": {
+      "path": "/industries/{industry-slug}/problems/{problem-id}/",
+      "purpose": "Deep-dive on a specific process problem. Shows WHY it matters, HOW to solve it, and WHICH chemicals to use.",
+      "template_references": ["solution-detail-agriculture.html", "solution-detail-ogm__1_.html"],
+      "structure": {
+        "layout": "Sidebar + Main content",
+        "sidebar": {
+          "width": "300px, sticky, scrollable",
+          "content": "Full list of ALL problems for this industry, grouped by segment. Active item highlighted with left navy border",
+          "behavior": "Click any sidebar item to switch to that problem WITHOUT page reload (SPA-style)"
+        },
+        "hero": {
+          "background": "Navy gradient",
+          "eyebrow": "{Segment Name} — Process Problem (mono, uppercase, gold color)",
+          "h1": "Problem title",
+          "description": "2-3 sentence problem description"
+        },
+        "sections": [
+          {
+            "title": "Why It Matters",
+            "style": "Gold wash card with icon",
+            "content": "Business impact statement — what happens if you don't solve this"
+          },
+          {
+            "title": "Solution Approach",
+            "style": "Paragraph text",
+            "content": "Technical explanation of the chemistry approach"
+          },
+          {
+            "title": "Step-by-Step Process",
+            "style": "Vertical timeline with numbered dots",
+            "content": "3-6 steps, each with title + description"
+          },
+          {
+            "title": "Recommended Chemistries",
+            "style": "Card grid (auto-fill, minmax 300px)",
+            "content": "Chemical cards with: name, CAS (mono), role badge, description (2-line clamp), physical properties, 'Details →'. Click opens DRAWER."
+          },
+          {
+            "title": "Related Product Families",
+            "style": "Card grid",
+            "content": "Links to Level 3 family pages relevant to this problem"
+          }
+        ],
+        "chemical_drawer": {
+          "trigger": "Click on any chemical card",
+          "position": "Slide-in from right, 600px wide",
+          "content": "Full chemical detail: name, CAS, IUPAC, description, functional roles (tags), industries (tags), physical properties grid, GHS info. Buttons: Request Quote + link to full Product Page (Level 4)"
+        },
+        "bottom_cta": "Need help selecting? → RFQ button + Talk to Chemist"
+      }
+    },
+
+    "level_3_family_detail": {
+      "path": "/industries/{industry-slug}/products/{family-slug}/",
+      "purpose": "All chemicals in a product family, filtered to this industry. The screenshot user uploaded shows this page.",
+      "template_reference": "Screenshot from user (image upload)",
+      "structure": {
+        "layout": "Sidebar + Main content with product cards",
+        "sidebar": {
+          "title": "PRODUCT FAMILIES (uppercase, muted)",
+          "segments": "Grouped by application segment (e.g., ROW CROPS & FIELD)",
+          "items": "Family name + chemistry count badge. Active item has left navy border",
+          "behavior": "Click switches the main content to that family"
+        },
+        "main_content": {
+          "product_cards": "Grid of chemical cards, each showing: product name (bold), CAS (mono), role badge (uppercase, colored), description (truncated), physical properties (Melting Point, Boiling Point, Density, Flash Point), family label + 'Details →'",
+          "card_links_to": "Level 4 product page (/product/{slug}/) OR opens chemical drawer"
+        }
+      },
+      "CRITICAL_DATA_RULES": [
+        "Physical properties must use PROPER encoding: ° not Â°",
+        "CAS numbers in IBM Plex Mono font",
+        "Role badges must use EXACT taxonomy values from functional_roles_25",
+        "Only show properties that have actual values — never show empty fields",
+        "Descriptions must come from the master JSON — NEVER hallucinate"
+      ]
+    },
+
+    "level_4_product_page": {
+      "path": "/product/{slug}/",
+      "purpose": "Individual chemical product page. 1,095 of these exist (DONE).",
+      "template_reference": "calcium-carbonate-FINAL.html",
+      "note": "These are BUILT. The approved template is the source of truth."
+    }
+  },
+
+  "industry_segments": {
+    "_note": "Each industry has its own application segments for the Door A/B toggle. These are NOT the same as material_families.",
+    "Agriculture": ["Row Crops & Field", "Specialty Crops & Horticulture", "Livestock & Poultry", "Post-Harvest & Storage", "Infrastructure & Manufacturing"],
+    "Oil & Gas": ["Upstream Production", "Midstream/Pipeline", "Downstream/Refining", "Gas Processing", "Oilfield Services"],
+    "Mining": ["Flotation", "Leaching & Extraction", "Dewatering & Tailings", "Process Water", "Dust & Corrosion Control"],
+    "Beauty & Personal Care": ["Skincare", "Haircare", "Color Cosmetics", "Sun Care", "Oral Care", "Bath & Body"],
+    "_remaining": "Segments for other industries to be defined when building those pages"
+  },
+
+  "template_branding_fixes_required": {
+    "_CRITICAL": "ALL uploaded industry templates have 3 WRONG values that must be fixed on every build:",
+    "fix_1_font": "Replace 'DM Sans' with 'Plus Jakarta Sans' in EVERY CSS :root and font-family declaration",
+    "fix_2_gold": "Replace '#E8A838' with '#E9A72D' in EVERY CSS variable and inline style",
+    "fix_3_logo": "Replace <div class='logo-mark'>RS</div> placeholder with <img src='data:image/png;base64,{LOGO_B64}' alt='RawSource' style='height:24px;display:block'>",
+    "fix_4_encoding": "Sanitize all physical property values: replace 'Â°' with '°', strip HTML entities that render as mojibake"
+  },
+
+  "cross_linking_rules": {
+    "door_a_tile": {
+      "from": "Level 1 landing, Door A panel",
+      "links_to": "/industries/{slug}/problems/{problem-id}/",
+      "page_type": "Level 2 solution detail"
+    },
+    "door_b_card": {
+      "from": "Level 1 landing, Door B panel",
+      "links_to": "/industries/{slug}/products/{family-slug}/",
+      "page_type": "Level 3 family detail"
+    },
+    "chemical_card_in_solution": {
+      "from": "Level 2 solution detail, recommended chemistries section",
+      "action": "Opens drawer with full chemical detail",
+      "drawer_links_to": "/product/{slug}/ (Level 4 product page)"
+    },
+    "chemical_card_in_family": {
+      "from": "Level 3 family detail, product grid",
+      "links_to": "/product/{slug}/ (Level 4 product page)"
+    },
+    "product_page_back_links": {
+      "from": "Level 4 product page",
+      "industry_tags_link_to": "/industries/{industry-slug}/",
+      "breadcrumbs": "Home > Catalog > {material_family} > {product_name}",
+      "related_products": "Same family + shared industry, limit 4"
+    }
+  },
+
+  "header_html_pattern": "<header class='site-header'><a href='https://rawsource.com' class='logo'><img src='data:image/png;base64,{LOGO_BASE64}' alt='RawSource' style='height:24px;display:block'></a><nav class='header-nav'><a href='https://rawsource.com/shop'>Catalog</a><a href='https://rawsource.com/industries'>Industries</a><a href='https://rawsource.com/about'>About</a><a href='https://rawsource.com/contact'>Contact</a></nav><button class='header-cta'>Request Quote</button></header>",
+
+  "footer_html_pattern": "<footer class='footer'><div class='footer-inner'><div class='footer-brand'><img src='data:image/png;base64,{LOGO_BASE64}' alt='RawSource' style='height:20px'></div><div class='footer-text'>© 2026 RawSource · Fort Lauderdale, FL · Specialty Chemical Distribution</div></div></footer>"
+}

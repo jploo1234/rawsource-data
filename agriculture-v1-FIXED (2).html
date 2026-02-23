@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agriculture – RawSource</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   DESIGN TOKENS
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+:root {
+  --navy: #1F4788;
+  --navy-deep: #152F5C;
+  --navy-dark: #0C1E3D;
+  --navy-light: #2B5BA0;
+  --navy-wash: #F0F4FA;
+  --accent: #E9A72D;
+  --accent-hover: #D49530;
+  --accent-soft: #FEF6E8;
+  --white: #FFFFFF;
+  --off-white: #FAFBFD;
+  --surface: #F4F6F9;
+  --surface-alt: #EDF0F5;
+  --text-primary: #1A1F2E;
+  --text-secondary: #4A5568;
+  --text-muted: #7B8599;
+  --text-on-dark: rgba(255,255,255,0.85);
+  --border: #D6DCE6;
+  --border-light: #E8ECF2;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --shadow-xs: 0 1px 2px rgba(15,42,82,0.04);
+  --shadow-sm: 0 1px 4px rgba(15,42,82,0.06);
+  --shadow-md: 0 4px 16px rgba(15,42,82,0.08);
+  --shadow-lg: 0 8px 32px rgba(15,42,82,0.10);
+  --shadow-xl: 0 16px 48px rgba(15,42,82,0.14);
+  --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Agriculture accent colors */
+  --ogm-green: #2D8A4E;
+  --ogm-amber: #B8860B;
+  --badge-available: #2D8A4E;
+  --badge-available-bg: #E8F5ED;
+  --badge-sourcing: #B8860B;
+  --badge-sourcing-bg: #FEF6E8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--white);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   GLOBAL HEADER
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.site-header {
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--navy-dark);
+  padding: 0 48px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between; gap: 32px;
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.site-search { flex: 1; max-width: 480px; position: relative; }
+.site-search input { width: 100%; padding: 8px 16px 8px 38px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); color: var(--white); font-family: var(--font); font-size: 13px; outline: none; transition: all 0.2s var(--ease); }
+.site-search input::placeholder { color: rgba(255,255,255,0.35); }
+.site-search input:focus { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.22); }
+.site-search .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.35); pointer-events: none; }
+.site-nav { display: flex; gap: 4px; flex-shrink: 0; }
+.site-nav a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: var(--radius-sm); transition: all 0.15s; }
+.site-nav a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BREADCRUMBS
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.breadcrumbs { padding: 12px 48px; background: var(--off-white); border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 7px; }
+.breadcrumbs a { color: var(--navy); text-decoration: none; font-weight: 500; }
+.breadcrumbs a:hover { text-decoration: underline; }
+.breadcrumbs .sep { color: var(--border); font-size: 10px; }
+.breadcrumbs .current { color: var(--text-secondary); font-weight: 500; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   HERO
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.hero { position: relative; min-height: 420px; display: flex; align-items: center; overflow: hidden; }
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(135deg, rgba(12,30,61,0.94) 0%, rgba(21,47,92,0.82) 50%, rgba(12,30,61,0.90) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><linearGradient id="g1" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" stop-color="%231F4788"/><stop offset="100%25" stop-color="%230C1E3D"/></linearGradient></defs><rect fill="url(%23g1)" width="1200" height="600"/><circle cx="200" cy="300" r="180" fill="%23152F5C" opacity="0.4"/><circle cx="900" cy="200" r="250" fill="%232B5BA0" opacity="0.15"/><rect x="100" y="400" width="400" height="200" rx="6" fill="%23152F5C" opacity="0.3"/><rect x="600" y="350" width="300" height="120" rx="6" fill="%231F4788" opacity="0.2"/></svg>');
+  background-size: cover; background-position: center;
+}
+.hero-bg::after { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; }
+.hero-content { position: relative; z-index: 2; max-width: 1380px; width: 100%; margin: 0 auto; padding: 64px 48px; display: grid; grid-template-columns: 1fr; max-width: 720px; gap: 56px; align-items: center; }
+.hero-text h1 { font-size: 38px; font-weight: 800; color: var(--white); letter-spacing: -0.8px; line-height: 1.15; margin-bottom: 14px; }
+.hero-text .tagline { font-size: 16px; color: var(--text-on-dark); line-height: 1.65; max-width: 500px; margin-bottom: 28px; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.hero-chip { display: flex; align-items: center; gap: 7px; padding: 7px 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.hero-chip svg { color: var(--accent); flex-shrink: 0; }
+.hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-cta { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; background: var(--accent); color: var(--navy-dark); font-family: var(--font); font-size: 14px; font-weight: 700; border: none; border-radius: var(--radius-md); cursor: pointer; text-decoration: none; transition: all 0.2s var(--ease); letter-spacing: -0.1px; }
+.hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(233,167,45,0.3); }
+.hero-cta-secondary { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; background: transparent; color: var(--white); font-family: var(--font); font-size: 14px; font-weight: 600; border: 1px solid rgba(255,255,255,0.25); border-radius: var(--radius-md); cursor: pointer; text-decoration: none; transition: all 0.15s; }
+.hero-cta-secondary:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
+.hero-photo { position: relative; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 4/3; box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+.hero-photo-img { width: 100%; height: 100%; object-fit: cover; background: linear-gradient(160deg, #2B5BA0 0%, #152F5C 40%, #1A3A6B 70%, #0C1E3D 100%); display: flex; align-items: flex-end; padding: 20px; position: relative; }
+.hero-photo-img::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 120px 80px at 25% 70%, rgba(43,91,160,0.5) 0%, transparent 100%), radial-gradient(ellipse 100px 70px at 50% 65%, rgba(31,71,136,0.4) 0%, transparent 100%), radial-gradient(ellipse 90px 60px at 75% 72%, rgba(43,91,160,0.35) 0%, transparent 100%), radial-gradient(ellipse 60px 40px at 30% 45%, rgba(233,167,45,0.15) 0%, transparent 100%), linear-gradient(180deg, rgba(12,30,61,0.2) 0%, rgba(12,30,61,0.6) 100%); }
+.hero-photo-label { position: relative; z-index: 2; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); padding: 6px 12px; border-radius: var(--radius-sm); letter-spacing: 0.3px; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   TAB BAR
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.tab-bar { position: sticky; top: 56px; z-index: 100; background: var(--white); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-xs); }
+.tab-bar-inner { max-width: 1380px; margin: 0 auto; padding: 0 48px; display: flex; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.tab-bar-inner::-webkit-scrollbar { display: none; }
+.tab-btn { display: flex; align-items: center; gap: 7px; padding: 15px 22px; font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all 0.2s var(--ease); white-space: nowrap; letter-spacing: -0.1px; }
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+.tab-btn svg { flex-shrink: 0; opacity: 0.6; }
+.tab-btn.active svg { opacity: 1; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   TAB PANELS
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.tab-panel { display: none; animation: panelFadeIn 0.35s var(--ease) both; }
+.tab-panel.active { display: block; }
+@keyframes panelFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.panel-inner { max-width: 1380px; margin: 0 auto; padding: 48px 48px 64px; }
+.section-eyebrow { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--navy); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px; }
+.section-title { font-size: 24px; font-weight: 700; color: var(--navy-dark); letter-spacing: -0.4px; margin-bottom: 8px; }
+.section-desc { font-size: 14px; color: var(--text-secondary); max-width: 580px; line-height: 1.65; margin-bottom: 36px; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   OVERVIEW
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+.overview-text h2 { font-size: 26px; font-weight: 700; color: var(--navy-dark); letter-spacing: -0.4px; line-height: 1.25; margin-bottom: 14px; }
+.overview-text p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; }
+.overview-photo { border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 16/10; background: linear-gradient(145deg, #1a3a6b, #0C1E3D); position: relative; }
+.overview-photo::after { content: 'Refinery / upstream production site'; position: absolute; bottom: 12px; left: 12px; font-size: 10px; color: rgba(255,255,255,0.5); background: rgba(0,0,0,0.35); padding: 4px 10px; border-radius: var(--radius-sm); backdrop-filter: blur(4px); }
+.supply-categories { margin-top: 40px; }
+.supply-categories h3 { font-size: 16px; font-weight: 700; color: var(--navy-dark); margin-bottom: 16px; }
+.category-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-pill { padding: 9px 18px; background: var(--navy-wash); border: 1px solid var(--border-light); border-radius: var(--radius-md); font-size: 13px; font-weight: 600; color: var(--navy); cursor: pointer; transition: all 0.15s var(--ease); }
+.cat-pill:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.overview-cta-row { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border-light); display: flex; align-items: center; gap: 16px; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--navy); color: var(--white); font-family: var(--font); font-size: 13px; font-weight: 700; border: none; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s var(--ease); text-decoration: none; }
+.btn-primary:hover { background: var(--navy-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-ghost { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: transparent; color: var(--navy); font-family: var(--font); font-size: 13px; font-weight: 600; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s; text-decoration: none; }
+.btn-ghost:hover { border-color: var(--navy); background: var(--navy-wash); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SEGMENT TOGGLE (pills)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.segment-toggle { display: inline-flex; gap: 0; background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 3px; margin-bottom: 28px; }
+.seg-btn { padding: 8px 20px; font-family: var(--font); font-size: 12px; font-weight: 600; color: var(--text-muted); background: transparent; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s var(--ease); white-space: nowrap; }
+.seg-btn:hover { color: var(--navy); }
+.seg-btn.active { background: var(--white); color: var(--navy); box-shadow: var(--shadow-sm); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   TILE GRIDS (Door A & C)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.tile-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px; cursor: pointer; transition: all 0.2s var(--ease); position: relative; text-decoration: none; color: inherit; display: block; }
+.tile-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--navy); border-radius: 0 0 var(--radius-md) var(--radius-md); opacity: 0; transition: opacity 0.2s; }
+.tile-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.tile-card:hover::after { opacity: 1; }
+.tile-card .t-title { font-size: 15px; font-weight: 700; color: var(--navy-dark); margin-bottom: 6px; letter-spacing: -0.2px; }
+.tile-card .t-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 14px; }
+.tile-card .t-action { font-size: 12px; font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 5px; }
+.tile-card .t-action svg { transition: transform 0.15s var(--ease); }
+.tile-card:hover .t-action svg { transform: translateX(4px); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   FAMILY CARDS (Door B) â€” with badge
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.families-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.family-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px; cursor: pointer; transition: all 0.2s var(--ease); position: relative; text-decoration: none; color: inherit; display: block; }
+.family-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--navy); border-radius: 0 0 var(--radius-md) var(--radius-md); opacity: 0; transition: opacity 0.2s; }
+.family-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.family-card:hover::after { opacity: 1; }
+.family-card .f-name { font-size: 15px; font-weight: 700; color: var(--navy-dark); margin-bottom: 6px; letter-spacing: -0.2px; }
+.family-card .f-purpose { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 14px; }
+.family-card .f-roles { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+.chip { font-size: 10px; font-weight: 600; padding: 4px 9px; border-radius: 3px; background: var(--navy-wash); color: var(--navy); text-transform: uppercase; letter-spacing: 0.3px; border: 1px solid transparent; }
+.family-card .f-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 12px; }
+.badge-available { background: var(--badge-available-bg); color: var(--badge-available); }
+.badge-sourcing { background: var(--badge-sourcing-bg); color: var(--badge-sourcing); }
+.family-card .f-action { font-size: 12px; font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 5px; }
+.family-card .f-action svg { transition: transform 0.15s var(--ease); }
+.family-card:hover .f-action svg { transform: translateX(4px); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PROCUREMENT CARDS (Door C)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.proc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.proc-card { padding: 28px 24px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--white); text-align: center; transition: all 0.15s var(--ease); cursor: pointer; text-decoration: none; color: inherit; display: block; }
+.proc-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+.proc-icon-wrap { width: 52px; height: 52px; background: var(--navy-wash); border-radius: var(--radius-md); display: grid; place-items: center; margin: 0 auto 14px; }
+.proc-icon-wrap svg { color: var(--navy); }
+.proc-card h4 { font-size: 15px; font-weight: 700; color: var(--navy-dark); margin-bottom: 5px; }
+.proc-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 14px; }
+.proc-card .proc-action { font-size: 12px; font-weight: 600; color: var(--navy); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RFQ SIDEBAR
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.rfq-float { position: fixed; top: 130px; right: 32px; width: 360px; z-index: 90; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); transform: translateX(0); transition: all 0.3s var(--ease); }
+.rfq-float.collapsed { transform: translateX(calc(100% + 32px)); }
+.rfq-float.collapsed .rfq-toggle { transform: translateX(calc(-100% - 14px)); opacity: 1; pointer-events: auto; }
+.rfq-toggle { position: absolute; top: 0; left: 0; transform: translateX(-100%); opacity: 0; pointer-events: none; background: var(--navy); color: var(--white); padding: 12px 14px; border-radius: var(--radius-md) 0 0 var(--radius-md); cursor: pointer; font-size: 12px; font-weight: 700; writing-mode: vertical-lr; text-orientation: mixed; letter-spacing: 0.5px; transition: all 0.3s var(--ease); border: none; font-family: var(--font); }
+.rfq-head { background: var(--navy); padding: 14px 18px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; display: flex; align-items: center; justify-content: space-between; }
+.rfq-head h3 { color: var(--white); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; }
+.rfq-head-actions { display: flex; align-items: center; gap: 8px; }
+.rfq-badge { background: var(--accent); color: var(--navy-dark); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.4px; }
+.rfq-minimize { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; padding: 4px; display: grid; place-items: center; transition: color 0.15s; }
+.rfq-minimize:hover { color: var(--white); }
+.rfq-body { padding: 18px; }
+.rfq-field { margin-bottom: 12px; }
+.rfq-field label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+.rfq-field input, .rfq-field select, .rfq-field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; color: var(--text-primary); background: var(--white); outline: none; transition: border-color 0.15s; }
+.rfq-field input:focus, .rfq-field select:focus, .rfq-field textarea:focus { border-color: var(--navy); }
+.rfq-field textarea { resize: vertical; min-height: 56px; }
+.rfq-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rfq-advanced-toggle { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--text-muted); cursor: pointer; background: none; border: none; font-family: var(--font); padding: 4px 0; margin-bottom: 12px; transition: color 0.15s; }
+.rfq-advanced-toggle:hover { color: var(--navy); }
+.rfq-advanced-toggle svg { transition: transform 0.2s; }
+.rfq-advanced-toggle.open svg { transform: rotate(180deg); }
+.rfq-advanced { display: none; margin-bottom: 12px; }
+.rfq-advanced.show { display: block; }
+.rfq-submit { width: 100%; padding: 12px; background: var(--accent); color: var(--navy-dark); font-family: var(--font); font-size: 13px; font-weight: 700; border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s var(--ease); letter-spacing: -0.1px; }
+.rfq-submit:hover { background: var(--accent-hover); }
+.rfq-note { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BOTTOM CTA
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.bottom-cta { background: var(--navy-dark); position: relative; overflow: hidden; }
+.bottom-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 500px 300px at 80% 50%, rgba(43,91,160,0.2), transparent), radial-gradient(ellipse 400px 200px at 20% 60%, rgba(233,167,45,0.06), transparent); pointer-events: none; }
+.bottom-cta-inner { position: relative; z-index: 2; max-width: 1380px; margin: 0 auto; padding: 52px 48px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.bottom-cta h2 { font-size: 24px; font-weight: 700; color: var(--white); letter-spacing: -0.4px; margin-bottom: 6px; }
+.bottom-cta p { font-size: 14px; color: rgba(255,255,255,0.55); }
+.cta-buttons { display: flex; gap: 12px; flex-shrink: 0; }
+.cta-btn-accent { padding: 13px 26px; background: var(--accent); color: var(--navy-dark); font-family: var(--font); font-size: 13px; font-weight: 700; border: none; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s var(--ease); text-decoration: none; }
+.cta-btn-accent:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.cta-btn-outline { padding: 13px 26px; background: transparent; color: var(--white); font-family: var(--font); font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,0.25); border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s; text-decoration: none; }
+.cta-btn-outline:hover { border-color: rgba(255,255,255,0.5); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RESPONSIVE
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+@media (max-width: 1200px) { .rfq-float { display: none; } }
+@media (max-width: 1024px) { .hero-content { grid-template-columns: 1fr; } .hero-photo { display: none; } .overview-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) {
+  .site-header { padding: 0 20px; } .site-nav { display: none; } .breadcrumbs { padding: 10px 20px; }
+  .hero-content { padding: 48px 20px; } .panel-inner { padding: 32px 20px; } .tab-bar-inner { padding: 0 20px; }
+  .families-grid, .tile-grid { grid-template-columns: 1fr; } .proc-grid { grid-template-columns: 1fr; }
+  .bottom-cta-inner { flex-direction: column; text-align: center; padding: 40px 20px; }
+  .segment-toggle { flex-wrap: wrap; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- GLOBAL HEADER -->
+<header class="site-header">
+  <a class="logo" href="https://rawsource.com">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAA6CAYAAADBXoC5AABZTUlEQVR42u39d3wc1fU+jj/n3tmuVS+WLLlX2dgG27iALQkwGGNqsgJCIAkBHEpCaAESYLUkBAhx6M1vWkLX0iHggMESpoNpLjTbuBf1sqttc+/5/TGzKsYGYzuf9+f7+em8XsLC3t2ZvTNz7nPO85xzgP+C1dYGpCDr96vOO2rc4389+WQAAgC4NiCZQei3fuu3fvt/yYJBCGa2ndtg938WHnXl1/fP2tHw6Ax+59ZZbz4cnDs9/dqlwQoD6HeE/dZv/fa/Z/vFATFAqA0Iqg4rAHgkeNRJB5aZfxqe23mQGW1EMplUHm+GbIxnY31b1j3/83r0+odfenujIOCJnwZkddh6X7/1W7/12/+nHCDXBmTa8f3lrIpJFQfI68oHxOf5qAXRri4TLCUEiLXWkph8Gbn0VXNW6/rOrEuPvfSFfwJQzEEBhJgI3H9J+q3f+u3/egcYDAZFTY3ltMaMGZN30y8GXjQ0p+PKkTlR0RWLKkWCyM77UfehGKyVcjuc0jTysHqH+90vGnyXnnndy++kw+KqUL2yQGW/9Vu/9dv/ZQ5w53D32euP/EmZt+PmsYVdZal4G1KaFQlDkrCZDiZAEMAMMKDBYM0stdIej1fuSORiY6f/nuc/c9yw8IGXNxCAJ2sDsrq6Pyzut37rt/+LHGDvcPe6CyoPOXRI6ubyAV1T3dyKRDJlMhkGke3sAJAgMIMBMBEJZoBZw3oNoLWpDUHkzcimTZGctq8anTfPv3zY9cCiFHNQ1NSEEApB91+mfuu3fvtfc4AcDAp5bUhrBubPn59/zozIwgNKUqeXeFspGm1XJqQQVsgLZgYRgZnArLXDIOFyOhCLx7XSBBLCDosZIAKDQFopt8spyZWLb1oyV3+2zbjijODiF/vD4n7rt377X3OAzCCEu8Ndeva6uReMLU5cOTSrozjR1YqUYkUgCQBa63SADM2sDdLs8/rkhraMVFtUrhqYqyblGK3oiicVpCGJ2QqNyf7RzEKZ2u3xyFYzGxvafC++vDJ13Z8XvfU+YOUcQ6FQPxrst37rt/++A+wd7v7PlUcfMnlQ8tYRBV2TjVQz4vG40kJKkSY2mABiKMUskVIel9uI6Cx80+xd8k1rziW/DL248r7LK844eChfPSKnbVhXpJ2JiEj2OjxrQAOKWUvS8HozxKZITuKbVv+d5/7lqz9vaN/QlgaX/Zet3/qt3/4rDrA2EJCnPBVWmoFf/SpQcMqY7X8fXRA/vdjTQdF4l9IkhSQi5p53MxjMSjmdTimduVjb5Pt05TZx3c9Cbzy1szN94doZd80c2nquVDENCAGyY1s7b2jpqAmsU0oSyJdZJFa0DWp+5Wv36X+68bHFQJCIQhppWrnf+q3f+m0vzUj/EgxC1IwLkOWoguL56946f1TBlj8OzmodkOjq4I4u0oIMKWxfRdTN6ipDAN7MfLm2NbNz3SbXdfMu33wnsDrCtQG5CqskVYeTAPDAn46cWehvGwxWaW8Hq24kHQoDBAJp1sIh2e32yW0dEolU6gWddG4EGNXV1ZR2qPafut8R9lu/9dteI0CbaDAB4IYFM3562AHiypG50YMcqgXxpFIQhhWscg9o1KxZCq19Pr9sTuXj2ybPI7VL2/9663Pvf0EE/PuWua55Fy5OAMAfz5w55fBy46qhubHji33tiERjAElLJAgrrrUJEZasldvtNJSzEF83eN5586vkny+8uX7xzucJjMgE1nQQAfqaoKD9lB8MBoPix74nFAKA/1J+kpmCNTW0+2OHeHcbADNTzfe/V+/tWnzfce2jUzC498e2bzcKBwKioLyhz+dUolLXYP8rBIJBCKBCVO7095Wo1KjZN6F+MAiBEIAgEAqB92HTpmCvyC2EXa5Bn9f8kNVYYrX/JoigYBA0bnWAel/LOgBAvf4x68EA1exrAUfQWrgQoLs/6JLTDi0/8WDXVUOyO0/NdzSjKxZXGlKQtC+7JWYBMzPY1G6XlElHPr5tzX779VXxm/9w5ztPA8DLt851zb9ocUJr4JDJ5YOuPa3sd4OzO88tzWjxxro6takFiIRgpLsjACABZlM5DCHdvjxsjOSsXblZ3nrin169B0Dq5VvnujwtMVUVqjenlpcP+PPphcGcLOOYjc34c+DqJf8EkPzfDomZWQCguro6qqur0/uJsPn/uzA/rTNFoJztVMf3rHlQ1NXUicpQvdrbBzgYhKhEhaisqVc/5OCYgwLh1YTqsKb/x64LMwQQRF1dnaisq9T7A1Cko0pRHVY/tFhcG5DhMPB/uiyWAoHpuT8/KOt3BxTHLizztWZ3RdtUSoGEIAG2ZCpWlg+WrEVAODw5WNfi3/LxRvH3X9yw7BYA4KUVxvKvIzRlwfIUAMdz1889fVBW103ji6O58UgTUimlmKS0WAwGtPV0K9ZaQsHryxAbIzmxL7Y5H3zgw5FXvPDCA53MTK/cdrQzjSTvv2L276YOw6Ujs9vLzEQEysjFV03+91e3ZF+yXh/wbk3NPpfTieHjZg3MdBpCCNn9OTHs9FsMgMcDIIZ4DFi3+mMNxDbv5BBlTU0N77Mj9I/JO2TaAb54LH0WcftPN3I8OViyZHEL0Bjt8R89NrUiMCAaaXUiFkMcgNvjAQC4tKKEkLx6+ZLNwG5RlCgeNrnU0+v7e9xuuD1AjjsHb7/9UmOfpfmO4y7NGVY+OKO1tRVuDwB44AEAtxtCGvq0kyq37rw2tTsJ4I88cnrukaMdYyTUxMK8DEAD2xs7yfD633/x3Q3blrzz1db0a3+sXGpnQT8A3PK7+YPaIjtmDR3gy/L73BxLKtre3IGBeflvvvT5poZHnv28ofcDS3ss1q8wJg/7ugRuwA2gFTktq1evjuzN7VBcXJzvQavXxaCOJKktLX3vOwAYMWJAQZZOeOwbte/da/+Vp9fr17e3ms3N2Nrn4hPwxJN7V5Cwk3oEAHz3BufnxVq7Rrsc5kh/hlMnE6ZoaIm2DRs25K3qK8IN6RvbilqIdofuB+V7i32Gdibs5zx9T6fNs8sz6vsEe9weJJNevWLNlq30xF9PPW1+edMjIvINkkmltJAy/S1ADFjABqyZMzJ8tKnTrzZ0+P9++5u+m5577rlm5qB45bb3Hd1O6sojKg4aqv8yKq/rUEq2IJGMm2AhQYI4fetpQGvNgKk9bpfs1DlY35b1zGfbM/+w4Lrn1qaRZPoz77ikavbs0fLqIdnRIxy6BfF43DSZpORUKic/z7n4m+JPj77kPwcyQxD9+LAoUFsrw9XV6pwLg7PPPeu01zJ9LmilBNuibs12IQuzvRVYRI21PTBSpkoVFhR9tHbd2m2tHZ2vP/fia6/dd8d13wJALbOsJvqxNxExM6ZMOdZzyx1/+XhAYfaIlMmqu7SQABJQDinlpyu/eeikYw8/m5kl2cdhZiIirn3mtU8mHjB8fDKltWGQEIJAAKQQSikt/73krbMvOveMh5YuXWpUVVWZAJD+/b4Hnzr9kBmTHlAaCoAEpVVLpByGlF+t3fjoMUfO/mXv41rnDRBB1L/z0eeFuVmjldaaSJC2dlA4HAI7Gju7/vXUc0PvvznUkj7XtEMpLS3PXXTxoKOzHMlf5jhiB/jdySKfGzAkgUBQmhCJAQ2dsquLPW82tfMzNy/JDNfXP9+2xw9osCdlcukZVcOPOgDVeT4+IcPoOijbB8NjMAQ0mAEFQiRuoC3hbGtPeT/d1JR86pLFEx/Y/N7NMQ5CoAa73XSDwQojFKo3rztn1lVzD8oIqlhz3OHLc6/Y7jr/jGueW5T+9z1DU9Zr/+eP8x+ZWNx+shlvSyaNfPGfFXL+9Q8seT0QCMhAAKiuDqvnrj/66SFZncfF4ykTRAazJVPTDLBWYAvuWaknQWCSyeKCnA+2tSruSmLZxhbnC2ff8O/lP97R913b2y8+YdSIwvYLCzL03GxvqszvVA63QwOswAwkFSOadKQ6zYz1kYTzlaUrIi/8adFbr++8GaYlcKcddcBBp1aWvJnrbHOklBYCGgQBDcBSIdt0gpVYSz+01jNLDGaGhmCf26D17ZktCx/fPNbIdseRijebQmuwYRgCbGUEwGASNkOrtcvlpY82ZL72xtcZC66+77VvAWBlMOCUIpTUjMTvAkcMChyqLx+U1XHeAG87ujpjSkMISYbBtusjtp5eDaWcTpLSXSi/bvSt2dyVd8Gxlz7/HwBYWRtwjkNYUfXixImzZhWfd4JxzYjcrrMG+juNWCRixiAEkTQkAZqdMpFIaC/FY/sCsgIAwgCy/N6MieNHOslCRT8mF2gAmFVUeBAAVE+ZND5+7jmnPfNk7eK/VhOt6u1g9sRqa2sFEanb737sqEOnTxxtoxq5KwLL5XafOP3IIy8XQrT0CpkFAFVYkPfhqBFDJ+G734cAyEPaY6MBUGVlT9bL/p3GjBp6+JjRw9Mty3ofWwIg6XDPBOC1d26y7n2Lob/ggitHTps8cZjLacid3ssASDq3bL3/5kVxZha9nd9df6g45ZDhYuHI/NYSh+pAPB4DtGlSElqQAKAhNJClIf1+6XE7PXMT+d65I4vM4MZ5R9/12Kvf3vuvJV+22M/CLp3S0mCFQaGQOWnSiIK/nTY4ODSr64yyzIifVReS8ZQ2kjqBJIiIIIhAYPazkJkeV7Y7x115QKGvclzxpxd/euScf1DotTsR2r1GtdJKNSHL6Bg4aYBpqM4Gw+EXRjKZLXv/+55Y+rVjipJy6sB2Q0VbVdRwuZatEoUAUF7eQAEUMgCU50eMkbnNRlc0RUIIqXVKQTNYc8+icI8DBJHbkK2VZUUOMLmqtuW4rnn/tsp3Vu/w/pmqw4s5CEF7kKdLr+0v5lUMWDDXeU2xb/sZJRlRn5mKIZVKaal1ihKWbxLEbGgiD5Ec4HOPNLJ9I0t87t9NHjrrldfWus+vrg5/m3amq1eHCAC8iOSOK+zwlXgadUoJQRogNhXA0BA9p8fpm5xg5Sp6MkkMhtspySOBzMxMGHGtoJgMyaSIekgOkI1y7GhVsYLPw77RI7wZ6S88PhROAuXO+luGn57ravjbyNyO3FhXm+7sFCDhkCSE7fWQJk60QQRfVrbc2J7ZtXGT97qT74vf1rj6+QjXBuTy1nVivM0YP3TlIRceVKouHZnfUhqLtqGjgxQJaYh0QE4WmhEkGEJgf5hKplQ0GuMMn0ebptXOgftc817anz7pOQ0iqQFACMFFhXnuosK8n5WWFB87Y/qky6qqqu7dCSl9v0MOBAAAB4wffQYATpkpZakmre9sb24kJakBRfl555x27pz3Xn21dunSpbK3o/185aqlM2dMPNshwUozw34/W7CLo7HoLPtLpB9eklKaAODzZUzTWkNrDSHIousJ0JohBLHL7Rx+7oVXDSaiL2wHwOPG1RAQwpw5h41wGNINwFRKyTS7L8CmBhmbNm1/C9jWBcCoDQSYqsPqwStnXzJ/Ev89W+xALNKVMgVJtzdDxE2n0Z4QiCUAwQSXw4TfpeCWJuKxLjB3JgZ53APHDhh4XZxHnkD05XQOAhT6rhNMk2g3/GbWUccc5Lx3bG7b4HhHE+IdyQSE0+V2+4Qih6tLG0goA4IF3E4Nj0NDmHF0RdrNlGrRQz2eYaVjcu94Y2Hl8U98xD8LhUJNtQHI6jB2eX2JRDKRImaTNCUVK+a9TtOkTMWpRIpTKaXjymQHPKmdX5NMmWzGUpyIJzQJIT1er2QybBchwfazw7C0t7aMDal4HGaqLekHZHF+5sxBOYWvvHzjkXfS5a9eYCN1+r6NpSpUb95zyexjZ4+iu0Zkby+NdrYg2q6ThtPhdHv8IsVOETENJLWEQQyvQ8PjSSGViCLe3pDIISGrhmQdXZKV89mUq+efSKHQ6xyECK+2AIowhBlPJjkuTU6YYEMY5PX4JCAg7dCPGGAiaNZgJjtWY0u1AoLWBMMl0Wk681tVjAx0QwMF1qLH94FAzNBWqEdmMsbl+U0zc3z681eur3zwvQ2OK8YUi9HlA5LXD83adAjiTYhEtAk4DUsiw2DFYGk9cIK0yvB5jA6Vj1VbPc+8t8Z52cW3/Hsd2eEuVYcTANTNFx5eOXuMunpwZvthTtWMaMSKdgVBMmvrfEhAaaUNwcrh8zm7lMfXh97Z25tLp8hOTRIRiATBQh49DrBb/8gEovT/EwBIsldSW4kDVZiX7T9mbsU9T734uiCiu7mWJVV/vxO0mFfSp556cf7wYWWHWxQRSSEkWSWGVrUNMUGbCsIQfMABY6oBPFlZWakBoKamhgHgjf+89sFPTpibKhmQbxB0ugoRSmkhhKABhQWDMjPLcwG0WkxdkEKhEJ+x4KKBQ4cMHCBsropIEIkexp6IzOKCHDn5oIkzAHxZWVkpQqGQDgQs/2y4HYcIYeFoKXsJCAASAJpbmusB4JXbbpMnh8OJh/54zMFVo1r/npHcZHYmNHz+LEdDKi+1viPjyY+/6fxQQ3/0xbpWGAZQPqgAWX7nkEKfPqEoK1VZkpnINaONyVhXRHodnmcBaIwLSCD8nfxiVXXYfOIvxxw1vSz6wkDPdme0I5okIQ1PdolrU5szsmWb8da3O8wPikoyl3yzrhVCMOdkuHMMIQ4bPTBrdKbhO3qAJ4KuaLuSYqueVZo9J9dXsGTUqFOPqA493rQ7JMhERFKSFpJYCMI+7NdSAtIgSgmQdBjkcDu/w4hKIUEkSBLLTp3d9cnm3AcS5DSFIBIs2L5HoVkhldLkcwjO8rEHqfa5A7P04CxnF7q6oim/3CzmjC4+/9/XHZ5JRL+qrQ2geheyMxvBm0tuPenYcblNz+QbW43O9kjSMBxO8mY5v2lwdESQ9dTmRvWewym/XL+jkzLdTp2f7czNznBWZTk75w3JSo5yqDZ0drQmBntifv8w16tPLTznCLpk0dLaYLkTWK2cEmRIQSSIPW5JDV2ZDe9tzKmVwqEEEQshoTXDBEErhtK6196uIe373+NyYGunK6r1xpghlQSxsPR3vW9VO+cFW+9HgqijK6EzaZuoGJrzq2HZzuMdhsod6I8iEu1SGiSEcBikrYeUiUGswEqZLpfLgDvPWLHD982Wrpzzj7/02dfS4e6Ek8PJeRcuTpxy3MyS86sygqXZHb8u9jTJaFfUTMAQJAxDMFm7FQhKM0udUD6Px4hRgfODb/2vfrGNr7UkDKF9YuaU6gGsRNSb0AARQWtiZsUW+rRyg7aAm0gIsuMKCGvTMRQr7ZCSKw6Zetdt/1O7XJwsPqitrZXV1dW7dYI1NTVEFNJPPjPnp6UlBX4ASkiLPEqfF7OVe9SWW6Ky0gFHnXXWH0qJaHP6IbR37G+vu/6aT0oG5B9s9eBhYaExFgCQk5Nd9pvfnVFERC3BYFCkEdzcww87ODPLlw1ACSEkM6MPZtEaEIJGjx4+DcADlZWV3Asii4ElJQcAgNImCWGk0QYThGxt60y9ueyDdwHg6OJikwExIq/jnlJXMzqiKfa4Mx0buoo+fuVzvvjCm1+p/+4KfQEAywA8/I8/nlY8vbj17AKvJxRLuJr+uNRxKzMItJPzC1j5pOCZBx85eUDbi0Viu6OzwzTdHq+zTRXgi5bMWz/clHnzBdc9tmE3l+VFAAidObOqqjz30tEFnnlSNVNHW2tyXLaeyKAlvzlxxpE1NaGmmprvVitZgRADUAAryH2gxYS9/wohIIT8bmIkHSEQgwgigYyOw/7w5m+BPQk+BrsfDY4/dEhu5IZJxd7JqUiTQsuG5KHDyk5/LDjn1erq8CN9pWh2zq86pB69es6x4/JbnsnCNhmNJVPejGzn5mh25NvNnuCtr7Y99dKSNzbu5qAvAEVX3XfJqNOnDfNcNMjfMop0QidNbDa12cgMWrTAYxEebgOGYQBkkNMhsaFZ+OZdufSyXszgjzYD0g7qGABZTobTyUO2mhoIYjAIQgihmRCLtKqBPiNXMaOzS2sShhQMwM4xCAhoZSppMLl92ca6tuyGrTsyg0dc/PHDwI4oL60wAICqwkmgyPfy3w48e1RB8pIhWY2l0c5WRKNKQTgNC9SmGWiAtKnckqTw5Bnr2nM+/3id4+YzblzyUPqy23qivTfT7PUB1Mv5WQskBBEgabf+UykhhCBttXiAICFSylT5OX4+vGL6QmauCAQCP6gIACBHDC07y/I1GkII2+n1hOSsCdJC+GZRQbbvJ4FjTr3vvr/dVFlTk0YhEoDZ3Nz2BoCpBNZgFrARNABVVJAthg0umw7gi8rKSmGl/5iGDPq0gqwIidP52/QmYKMHIQBkZWYc1pMHZBKCFACX1+Oa0g34mC2WQDNDQGzb0bjm9r9fvZm5VhJVq+t/e/iBwwqiB8TjXcrpdBnb4rnbbq0vPfLOhx9u/ujeyY7OrRncuLqQrSDIytgGAoAtk9kG4NrLz5xVVzowr2D5S4931dQERaiXJtOaPxPW5584Ne+YCcZDg1xbHZFYPOVxZzi2x4saVjTknHr8lc++0VtW0ziukHsdDgWrGqiyplIThZYGgaVP/3nO+QeVGHfkuRqMaCSSnFjYPnH+VP+TRKji2oAEvksaMGuANVgrKOy90kOSAJGw7zBA7tIDCjtuI0gi8fLD/8g8uvSZLvgjhM6MPvdfnZ1fBABRVR8/LbRhCYCD37nziPsn5iR+mYw0a09qux5XUPbHQKD28cqaapUOsjgYFOLakL749MNHTRhoPpMrthmd8aTp92U6VjXmbn3z24yjfr/w3yvTIXLluEIOh/sm3wMFDSQOq4+etXDHPfPnn/Ovyw5b83Sm1zX3sTcbfnnTY0tWig8CMqcXmhdCWJphYkCSc8iAAUUPPj56S2NdowhUFui+GsPd51Pr6oCqUL1pOIQCSIPJfj66gxWCEMTMrBkkiOxZH5oAQ8qEtuCElFJYiE+DmKAUMyGlMnweY0tXDjZvybnjf17vuunhl17ZKAj4/MmA03J8wFPXzp03sjD+11GFbRM50YTOzqTJLKWQUhIYCsJum5XSgpgyMjLlt+3ZHSs2OO4K1AwIAuEkc0AuX5QjpixYlNrXHKCJHhUFUV9SFmDasmV7pLmlbasUApoZzJqkNNjnz8weUlZUKKWE0qo7bCZiSBJSA2pw2YBD7/vnM9OI6N3docA0KXDttXeMHT500IF29CR7EKmF4yzESXZOwwJpI0YMPQ3ArZVACgDC4TADwJZtDUtSKX2FwyGETsf3omfLmzSxfFQvIkQBxJlZa2ZZ26EmQaLXJpDmvi2WrDA/b/ivz/3DYCL64pxz7nUsWoTUby/6y4HFxYW5ALRIxxzcHXWJrdua3gWQWF8XdQNQ40tzyrM9XQZFzbjLne1es8X5xp0PP9y8Mhhwjl9g3Sd9LdztC3vJLd7s2QR3CkGtf9cvX++7+aCS5uKO1mjSZbgc2xOFjXVrso4488ZnV3x072THi1uXK1t3qHc+nKU4rkdtICAD5zUQVb125z0XH4LjJxXd4ZMNMtrZmqwY5au895JDz6Pq8F07y3lg6m72lb9Hd7Qnpll3F04xAVLuxpmS6L6JzayhJlXVm3tQS09LgxXy8GvrzZnnp8796DbvEeWZnaXxeCw1MLNz7Kyi208nwkO9vx8z6OgD1H3jCzuN9rZ4KsPrM9Z0Fm6+Z3HbnEUv1X/JSysMVNUr2hXb3eMM6d5zJhsLFi3qemnFL048v6pt5J2PLV8RDAZFdSikagN9vTzZVWMC0Ou3J82qqnoTgMBeCOMFIK0Lw/aK2je5EAJJeMjpy5VOQxAYyvp7BglAEkgISwEghE0msTI9biLpKzQ+ay5Z9tyn7jmzL3rttw+/9PbGl2+d69IMjK8OJ284d/bYD+487JGKEe3/HpW7fWKsY6uKJ1JMEEa6IE5bV4oJSmX4fCJCA+mt9fnPLaoT0wI1b13JHE69fOtcF1FY7Q/n102r9gp700SQ7Rjw6YovlkycMHb0+PGjyyccMGb0xAnlo8aPGzVmwvTK8uderju7rb0zQlb3/57yZis5yz63A8MGl51kkxz0fcLnqTMmnJWV5Rfojlu4GwkLIaiHxmMQCQGABw4smnjrvY9PISLU1tbKQCCgAeDfz7+woqm5rQUQwiY/7CjWEsEL6ZjVLXMn4lPOvKykIL9geDqcTSM/ItG9HHYyXBUV5GJWxczpADBjxigJAHOOmDEsw+t2pHeS9PGkkFAavGXbljoAWL9+PQBgQL4rAa1YK+sebGiNMNcGZCMafvBmJgJTdVjVBgKytjYgd85N1QYsdjl05uTKCSXq9Fg0ooRwyKgooDdW0+/OvPH5FSuDAeeUBctTe1JVUh0OK6qqN/mjcxy/+cfbd37W4LvZm5UnmRkus4UnDTL+dMTkYVmBQFj3YsugoaxmH6zAwN7hPxumqbQyo3dScOeHWljpLEH4sTp6rgrVmx/cM9lBqI9vanE8IFw+EGnT70zwASMyDgQs1FZbG5AUCumbL5xx5ITixKyuzibT4TBEQyIPS78QP1300vIvly6tMKiq3twD0TgvWLQ8xQBhwz/jdz70/Ird5lOZuyNUpbXEPlaFCKdT9jx76aQ/QWX4XWiKeZ5+89vca9tQypn+TAmyZr4JUPeNTcK6INKQnJFbZKzvKt3xxtqcBQf/dtnhF9/x1pKXbx3h4tqAnHfh4sSIg+dmPlcz86aTDowun5C35TQjsVlFuro0SEhK6wTt1SJWptflJIe/VH7SVPLZO1sGHnL4FW+f+I/H3/3y5VvnugDQvAsXJ6769byxN15y8jWBwL6P2zR3gn5ko7hukaXHnQ5HycrBCAghOLr96+YTj6m67/0PPzsfQrCU6SyPzUIpRcxAycCiMdh9dQcB0KNHz/QPGz7kJLbJChCl04xob4+kXnt92QYhBBNri9UlgtaKPS4njx059LcAOBAIMBExM4tHHrmnob29bcUuhNIEAAMKCwaNGTM1L/1v8+ccelBuTmZWOnffy2Fy93ADIrv9GWj4oLKpAPDLX1pPqNvtmt19LOpOIzAA2djUlqpf9sE7ANC4frUGgI07Ol2mMonBACuMHZLlp+qwqhxXKGoDAbkn1606HFa7EuwGaq0/qybknDzQ36E1azPDny2/bPG9ctbNbz3BSysMS8nwI23KIpNrA/KWJcaV6zt8X7jdbkci0ZUqL06W/KRy4E+JwEuDFb3OXSNN/BIDjn2qddD2mu4+BLay0GQLmn/8I7FuyTDNAK1vNN/pSBgspOEgNkkmW6ypjpV1qmCVVdI2dajrtByjjc2UabrcWXJTm++mCxa+9v5H90522Mhsz8Wv9qP/fa3vNDOIlRZsoiTfsRxoabBljXrvQQ/1uV8BMAtImJTRefQfXg/ecP4hbx05YcA1Q7OcMynZAghBpDXYhqKGdOh2XUgrtmbffttzO2568tW3NjEzrQpXO8dXhxPAGtRee9gpw3Pa/jY6L1Km463oiECRNCR1d4kWVkGiNpXT4RBOX5HxTaOv9cttrmt+Gnz1XgCpj+6d7Jh8zjBNFE7gwqB44uo3rpo+MnbJV4284/KFr1wLBPeJCDEsvW93CGzdtNaOI4RAIqXSD373n2nmtqamhigv77n1n3x+x+BBA/1aa04zoLAE2ujoaJ0KwCWliO/sCJcuXSqJyFx0/5Pzhw4uHcSAIoK0ySgNkOjoiKx9+vmXrq6cPSPscBg6DehYs4BgGjN6+FGBwG8LhBCN9nhSAYCb29qXAZhtO2ZbTG3F6RkZ3rLf/vaCQiJqBkAFBQUVhgQrZWohZHe1okiTPD03DAFAUWHRlHS+EYCjIC9vrLVAikjI3nlN0dbasubBu2/YzMwiHLZSAJ+vbf3moAKYeUSOaFdcDcnsmv/g5TMvo+rwTT05vICoqWmgmj0oV+v7PIX1mTNH+/0yekws2ikEWLaksvH5BsfNwSBETd1elk8BzAUNtHhxfeLLyiMfHTLK9xcdi7CPOri8JOcEAPdXjivkRUvWibTL4jRpJrBr4uKHzD5XVgytGbBD6l3hSe7dZ3MvnoZV5WEGwDMmDluVVF+wRzgks4ZTpPLTK1AVgnnmEaNLPBQ9ORGLEpFwftPo4Cff67qPGVRTM18By/dmedmuM99Vih5Km2AoBgtkeowWQZTE8oMcHJy/Z59eA9TU9NSiGzaFCUHppbTgpdYMU8FgDgqi0GtXAK+9fdvsZdMGxg/tjHYpSSStvYaVSZnyjVXqrDOu//f93YJIIhNA8vrfzDhsdrnjmlG5rRUebkW8K6VYGEII6zZIh5qmViyJ4c/Mluvbs9DamfPX215tv+PRZ1/dxgx65ba5rikLFiewYDkevqrip5MG1V02yNt2cIajE9+axavsRM0+x8B9dkwr9ddNPGi96607FArxtddeqzN8PmdDQwMGDxr4XWwHwJ/h093feecIx2JS5cSJ5b9yCGKllJXwtY6tiSDWbtiy7N7b//bUZRddsH740LIhlmOEEJIIUKqsJD8n8LPjAuHw7XfZj5kGwGu/Wlc/bcrEqwwpRG8yA4DKyc4Q+cVFM2x6lbMyfbPTxSZs5RwBIjS3tEZzcnK9dhPIbvVUTrZv4m9/+6chRLQWxcVej9c9zkp7aWHYDlAIoQGIpubWd2DVbRvV1WHTFrounzli5jeHD8sa2x7pSjm5xXH0AYV/++DOo4a+8mn0SaK36tOkQihkO8S6Chm+q5Crw7vvBMRBC6jeftnAkXmeltJEPKHdbrexoVltvvGZr9/asgWauX6v03E1dZUaqKcv1nc+P2kAXZ0t2DBjbZTlcE2aPr08F9Xh1q2BctkD2rin9n2vPGAv/McarDW0VlBK7TKzle6yJPYhJmqKxJyDc7tzGUip9I4WEEBYTT0gZ9qg7JhTp8yUx+t3RKLep297fOk3tz6G/0rzYtP+7mBFDEJzp5mnmUFTlqf22Nnu5CIMmWaM7O3W+pOs/qTETBTSW16Y7y07/qWu1ii3WYGahhY9OaGo6cLW9sRXXBuQ4VWQVaFw8szjDiw5tTLnLyMLEmeUeBpltLNTxbUgSEP2BGNkq+ZM0+tyGe06D2sbsp9+4cP2hX9+4KV301IZonASWJy4/txDJ1eWu68eWRg5PoObEY90JpLwOEHC2F+L3JsFJvvCy3Q4sbv3MCMcDstzz706kZ+f39fr9XJ40UiX/K6I2kKQRKQuuODKMSXFA+bYu5BIv1cIIbriKfPTFV8+TETYuq3x8eFDy65gITTZzK6pFBkSPG7MsLMB3A8gaUlqCI8//uRnRxxV0VxSlJ9n5wEJYChlodRBJcWTAGD+/FPzB5UWD0vnNggEEsymyXjppSVLTjhh/tzsLK+LWadzkWZ+XrZz2qxpM2+/HWt/d+o5Bw0sKfYD0EJYzjaNngHwxi3b6gCgrs6CM+HVq4kZ+vaL3AvGlpW+Upyx1dfRFU25aKs8sCjn3PzpznOPmzj9k4Yu99tfbYl/+NUOsYTona1ALxlGbUAiENY7I8M6VAigXme7xKxsDxgxnRBOrydBmS9v3rw5xhyQRHtfeB8KhTQBuOye91YeOeHQbwsyxZh4PMZug0t/cdSsTHpvdUtteV8ZjLbztsC+xMDWhszCEi9jlw5Qg9KydxIo+dHpxgpRw/X8wJXN0zIGCkFxnRCGwyXdvpUA8M0rnQYANaI0f4TftZlNEylNbsf6ZnxpXV9r7fe3AzRssAYIUkyQOlHwzA3HHDy8NCuWAmBo0eceSKb/ayc5HIZgvz+btkWyOmb94saNzCDDEiWxXdVK9gXSYGhbSAiUGKbSDAiQwaayGC07F2QLy+A2DA9VhxUz9CmfHFdy9tzUB9PLGgdG2ls4GlEK0iGFgIUoADApQCtlSBJOT66xuiFz/VdN3kt+HlryDGCV2Y0bB0XV4eSp8yvyL5rnOz/X1Xb1kJwdMhJpV12aCNJlSMMgYcj9tsj0Pf9nOB3EzAYAY2cUV11dbd5176PHlJUO9Fn6OZKclsMIoRmQfn/mcgBJrXWfqpDKSku6ctxJJ/yktCSflVKKhDAYDKW1FkKI9Ru2rrj4vNOXAcDLi199unzMyCtzcv1SgyFAkFa4qocNKZ10290PTiGid2pra0lrLYioceu2mpUlRfkVrJmZ7LIOuxuQz+eZBgDHnXTihLz8nHwLcQqrEAZELe2tePX1t24+8qiqydlZ3lKtmWVPtgCjhg+ZAeDhyqpDh2f4XE4AypYogq0LLrfvaE0tWfr2u7YD1OncXW11QP4uHF6WEzxm/vShJQ8NzmgZnIy2Itq+PZELYRTnuA8cW+A5cEqpA41dnrZfzp7zhcni1VXradlZN7W9Q9XhWC8xbq81tXb7cUNy4Ha0UCJOYJb4elOkEwDV1TTs80xssu/nDTsicly2ADTrLI+iePOnYwGsn9QyiIDVlm4y7bx436qWbBGApVjbTUGJTjtYAoTgvl0O9sD8JREiAi9dKCq9hokYkxbCifa48wsAcOwospJmqc4xUoASICNlEhqao18DQGNj4X+xUw6BhKR4klDsjw3N9297X2MbiIUtNbIrW3pLmoXdeEUxcrQPnan85wGcUFdTIQ1A2O4vHf7CrnIgQIudFlZ31xinx1wyM1goAEKnmbk/XeBy5XpbB8Y6Gk2r6MCCzpqsOSCm1lqy5oyMDLmuNZO3NGddd8W9m25Z/vXXTR/dO9nhzolRuiTuX3+cfc6kwerPYwq2Fya6WtHRoRQJQ0rBYGZFDgNS7j8HuLvCNwBIxWIJO7T/TnI3dP2tx849qvIewwCZpklSyu6LAZtf37xt+xd2FNMbsVJlJTRQ7B1cVvjrtM61u6jXsMLHVau+eN7O6xlE9Fngpyd9kpeTcaBmKBLdc1nY7XbyhPHlvwXwdiAQQJ2dB9y0adubUyaVz5aCtJ0l7wljc3MGAXCPGDl4qtNh2BACQmuwEKD2to4tjz98+/Jrg5d9AaDUeg5ZsmYhpEBmpr8CAPwe7yHpx5R6Kmg0ANnQ1PTNg3ffsMUGoLo3gVEbCMjqULju8MOnTr7oiOy/lmU6fzYoJ5XhlTEkk3HoWFvKAdYlLke2K9M9Q0rfjCFZLnx6t7FuXVPFs7Ufpv5B1eGtuyrcz/QoSKGhGTKpNAaX+F4FwI3j9v0hVcpCkQPzXEuFFCMNiaRbao9KRA4A8MqnRpudA7RKQikdBu/T/an73J+7DIC1BVJggZY9/uxgEGIcAsaUBeHkFecePqw4o/2MWGcra4azsctlfr05+jIADBkyxASAzmjXgXZVlEiajIMmln0KfNBb3rLfzWK4CSQIBBMe3cyaGWw3RGObcOpO89jpPSubpU2P2WVkkOx+fo208k305T5tl9gXxbK2kCF1N0ywkRybAJw9sXoqycpUJruEAZUuJbHKt0CMzAyPiOocLN/ufHnxp/Fr//zg6++nw9204/vrubOnHjleXDU8u/04B7ch0m6aLByGEJZGsAeBEZj2Ty2wae6cn7P2EtYQJASKBxZPqH/7wxqHNIRSmp1Og3NychwtLS3zRo8eOSk70wtlKpZCUveWohWklNQVT2HVqm+e663R66X90/984tlZw4aWDQWgpbTIB601SxKyoaUzvuzdj/5V/ZOjeeXKlQQg1dDY9E/QqAN3YvkEABoxfMhRgcCvc4UQLW9c84YBgNes2fBmMmWS02GItKwmLanxZ/oGHHfK+bm52dmTreOaNoHBDAg0NbcuJ0JkR1PL+yOGl82RUlpKBBtBZmZljiopGZM3aNDAIuv9SMsUIaVFoze3drwLIGEnwNTOLK6dD2x+/XUsOPn4adf/5EDfUUV+//FF2RiX6Y4PynErCI4hGYvCTHYk3SAx0uccNion85IxhRmnnTJ97qVUHX50Zw2e1oDWaXG/dY33m9VZKDIvy9HUJ6sjdn5okX4EQLSv+MfWmArqlkJ/BwFqi1HXWiHFCrm6QfLSCgPLI8T80XdWQErBSjFZiq1w8o8XBQb+dPjW5wf72txdXcmU3+93fLjZ8fmFty9bam3CNboPu21Lbpz4L5uRlmEJCGIodprNpt/QEGCTe0EWsnZuIpBmEDMYGqapHFmGF9u7Mo2ej1SwKz5gF0n3tI7ZVRfDNDIhshT+6b/rm4RzW4V13IswtIdmkpGBDdGiT95bh7//8toljwNWLfDRv3slSUTJE0+cU/iHI8R5OY7mq4dktomuSFTFYAgpySCtLIarh7gGsbbLjPYvAuR0twy7uo3BOHBC+RhYBcd9bXgZALBpmpBC9pSaE8BgBUB+8c3aD3533unv2A5v542bx4wYep4hpV1PYzO1Nnpqbmp657abrvr2tpuucq1atYo/+ogdb7z9z5cOnjz+77nZmYbdoCDt0FRJcWF29c9PnRcO3//I18f6ia4lPPZM+LNTTj6muaykKE9rZiEoXfuosjI8YvrksT/1eT0HWPgNQlrkBQPgzVt3LGUGff31128ePHk8O6zeVJCW91XFBbni8j9ecbghjZH2Goqe8iIr/9fU0JDO/+3SBVAopHv16Fv/5PO4F8C9o0fP9Id+ljPG56Y5ua7IrAKff1y2O1mWIaOIR7uUTjTqwZ72AWUjyx55756fFkyvDt9iaQKt1n2NEY0yh4ZgrQwJrN3SNgfAq2kZxz5ZZb0CgC83RI8sHaGhNDkSyqGdbscKAJg0JNuKiqTBQhpgkpbT2ocUoGFrMtOPu9pNDjAdpSnNOPSEBZ09B6Xdair/el7FiIMGO34yJHvj7wf7WgZEu6Km1+kQ33bk4r216gJmUDhcLexeHcjweT8htB9IYO10AB9+tnkCgM9Xle+Htd29/wMzs8sh8VWDp/HBZV2BIYNyOpG0HLn1SieSSMIJZ08mMGltxh7poI3t0Q4AqArVK6O3qEFA97TCQq/URS9piBUeC7usPd02S8Ls4wHj0FpZjslONzFDe90Osb7dtXHMWTkHA2HFHBTLF70kpyxYnMCFJB+9pvKssQOifxmb15Ef72pFZwSKhFMSeiQplD7F9FaqNRT/F5rIkgZY2rW39hxjrRjiu9J7pZQgQUIaPWEvEcCmYsMw0NTSwcs/++xc2/GJncgPfcYZvx0+fNiQKhv1SWFrK4UQUErjo/c/vr189DBtI6i0rT1i9tQXcieVnyQEmek9SGsFISSXDSy6AMAj50yerM6x84CNDU0ry0qKKsDQrEmS4HQlCR104LjqDJ9riM3aEitmkiQbmzvovfc+qQfAi+66b/mcIyqaS4sL81hrJiFIK01CCjGotPCszAxvXu9HzHa0srmlPbV02ft98n+71YFVh1VPl+ZKTRTqPCWIDwF8CACnnfbbzJ9PWjsrw4j8fnhe8ohM0SITsYTyYKMek0s333HxrLbq6vBDS4MVbgDmynWNGDfRYooMSRhdmpltSWsKeV9FA8JCCyjK8WYztwIkZEfcIMeA6V8A7+PTFr9F4bNwQBjWPSsYZOyFXtXOaRpOSVabLgHFQDyV5F2xwFb8RqaT23M/u+2g+71+/9aupPKsXtc5R0gp0hCdCPC6JBUXeNgvYyPL/O0uHW9DVyyZ8nq9ju3xQvxnNZ3zp3veWfbHIqsyI13K6vPmfMnczlIo0+mEsyDLewAA1FSmx0TsZxbYNKEtYEYCQGNUFNxSu+pLAM17i3eMtErJIj7sB95u+L1zYCm4J0SmXr8J3hkBAqxS0EpZpIewqkwIjJSWMUJYfXXrXBdRKAFAPxw6cerwnPa7ywd0TTZSOxCLJE0maUgSUqcdX7r9KFvf3u5TCK25T15kH7M6EJwutEgTQtQtp2Jr+HsPAWJjvT45SOphfg3DgGbIumUfXLzg9FM+tupfe9BfjVW3ax49/6hAXk6WH4Ap0oy2BUFFLJ7AsNEj56/8euNUp2GQ25AMQwoB0sqMZ/aWpNgnIAHw2FHDDgxed9sYIvry5ZdfdgFIbtvW8iYmYba1lOnvZkHqQ2dMPcTtdtsPNsGSbkNs3daw8R83/n0NMxtE1LJx07YVpcWFVWxBCkl23d+sQ6fP8fm8ViLaltD05P9avrn7ltCWdLj/wwwrdAj1GqF6y8MEg1SHurRD7Hj0UfwbwL/vvGT2STOH5j8yOqfVHY9F2Gds5QNKCq8C8HDluMIUALS1i2WtXQblSKcTOokcd7yKCLwvDDAABAIBWRsO67sunDWmKDNeljKVcrndMtUpNz/7/GsdDNCibess0YthNDIESBAkaWT7jURvomZP/R8A5PicSRIMKSULNtDalnR26wTH9U5eEzQIbhk1ygtSZwIdgBsYMxFgISBIpHUOdnVFM0ylkIiaCiSQkT3Q8XWzf8OrK7ouuuTOd5+trQ1Iqg4pAAjfZeVP12xpWzM+h0ho4RDaRKEveah1snVqX8d27FYHo7Sd1yAArN3uEm/s8rNba+pCApVpRxDcrfalBkH0nidj7JQ+SlfC9m7j1yuXIbqLkbulM3Zy19hVLgIamiWE1TbFFg+Toa1EeOLSX8wbcPzBqWuHZDX+usjdJrq6IiqhIYThNNjuU2bBPaXtRKJkWy9OdqzIoN6jTfY9BKZezo16N0SwmzJ0F0RYShXu7qLTVxZDRLqpuUW9+8GnlwdOmHPz0qVLDaLvNEXVAIzyMaNOtNaHu1tW2bW/5PN5cMjBE379Q2Ck9zUCoDP9XufM6VN+CeCKo48+mgHwl19/XX9Y1fSrPW6HYLbDJBvt+7y+PpxPWkLb1tb+AdDcCcAFwIxE408DqJJCdJe6MYC8vBwFq3TOPnW2F0tge0NL7/zfj2XlGZYwttshhmsDIlDQQFRV/8wlp4wPnH94xgt5MioSsaguy0oMvujUWZOpOvwBM8QhY1Z/Uzlu7JaSQk9JIhkzBxdQ2QN/mjdzg/Hye+PGBWhvWr4DQG2tFTa+Uogzi/1JV6SDEy53hmhvdn366nurW1AbkDmAxqLlOPiQaUsS/Ok1kli6ibFhS8dBDDyIysI9F3VXVmqg3hXtbC9nP6AhHSREF6R3tR2OayBAOxMlAgTTVDZ4oO7oRpMACdld7slaIGmaWjocpMlPb611LbzppeSNi996r3HnvGqgNqxBwKrGzvendjjjQ3xOdyIZ00XZWQcvOGnaSIDWfF81x97HwIYF1exuSMSMeDzeM7+kPv3FQ98jAwzt9OBIWzSpyUJTWiPd3EDtpDEV0gCEYRcjcx+qwNxVYoMZZFPT2hZuppIqSRQWD/3hkNCZsyOrppU0ne3XW0QkGtUMkcbm6QibBZTpdjmEw+2XCgJWZa2NCdkWhe6vHKCSfZQF3XWHaXEpg0kIkwgmEdk/MNOMWzdtYtUCi83bGiLHzTv8LmaWVVWVqi+CqJVExDfc/D8jy8qKJ9sLKrhP4117m1FaQWtTd//AVNCm0kqn2fje/HW6znfwoIEno7zcCcAkIjz+7HOfbW9obgYgWGurkMdGAtzd96XbkTIAbNq25U0AFF61igHg/fc/fqczmkgCEOlqGDtFIWGXCZP9UAlpQGnwhm831wFAzW7yf8xBsafT+Ajg6uqwoqp6xfdOdix8YuW/N7bK91xup9Cslc8No3LqwAwA+Oa2uY53vmrubI05nzdcmaSVVlmizTk0JxIMhaADBXuXq7Jar5Xzb06cUTgoN3VOItbJRFIkOIO+2I7nAKBuVQOl2dDX3vpGxhLEhhDQOgWfR04ggBHeM7rUAnQhPXnyZLdXpkabKRMQDqOti1RX9sA1VjTRcwMQJAABwUxdypVa1eT/6POmgg8+a8r78NOm3A8+b8r/4PPm/A8+b8z/4LPG/A+Xb8/+4OuW7I0ut1+wYu11O4ilM7X4rbcaX751rmvnTYIIzLUBedMDn2xtSfre8fp8nNIqNbQgZfysIucsIvCxJS/JvV1b5qAI7kJ2axiAJGmLGPYP8SmgLBzS0/HDDjaJIHeSkVvugHWvJgHo1UPhOyIp6tWbnFmTSin4qD3vvZv//sFJByWuGeTektvR1qyUldQT0D3D0Ukr5TCYsvKKjI1dgzY9+4FY1JrwspSiZ5C6DRA17ycEKHtSi9QLD6W/h00yWLsAhGEjaIMEQ1syVyslYJXAmZPGj8l5NPziH4hILV3aF/3U1gYIAE8YN/Y3OdkZUmmlyIZTvHPJrhSShTCIyP5hQzAZwp6ux+nGrEiz9BAwoQeXDRxyz2U1hxGR1lo7l9e/1NTW1v6edd2E7h2mEFEvXRkxANnc0s7vfPBxPQBeNW6cSUS45srzVuzY3rDNRp26dzqAey52d/3vjoZm8+VXl71jhWl1eld7JFFIh0IhbTc02HO+KmeYZg6KpBLt0s5LS8NArt+quFnqbtQM0Lq27IUbOjLiDiGMaEeLeUBR15xHr5pzClXVm3zvOY4fC0prjj1HEoX0CQc77xiR054Zi8VMh+EwVm9zbV384canmEFVoXplV6rgxcWdy9tj3Cil2xGLxrg0MzXhkp8fPDTc7Ux/gGwOVkhm0BUnDDhwUIHwpFKJlNPl4vaEd+1dd9kMOvUGKg5L/iEgE5TXMuWiT6ZNv+jdaTMvfu/gQy5+f9qMi96dNv3Ct6dNu/DNadN/V3/woRe9Ne36F41D17ZldhqGFPFIkzmpVF/xeHDukfMuXJz4vuuyo9O9sENnE0EaqWi7HpIdu+ymC+dMm7JgeWppsOJHFSjUBgIyFIImCukQoHdeG8MAhBQgIUDdHERsXx2gxaJa7bA4rZ6EISQ8jp11gB639LgEOGlC2/e+/q4e0+223ShbY0vSziOR0ij0JQonFDYclIpuU10Jk0FS9uQhCayUFqR1RmaWbMfgxBtrch684P741Le3Zl8nnVnERMx2PzROJ+f0/iNBeseA1N1swII6n3y2ctUbde9f9nr9e1f8+9U3//Dcv9+47JEnnrtm69YmDQIrrTk9eUApJQFw1awZFxz/iwuzKyuhuTsGAdXU1OhhwyZnjRox7ETbE4ieuQVkI2bN6R9Wmpk1a819TGvNWvUUyFuyIMBkk90uiUnjx5zdW9/U2ND0BgBIIfoKfrin759SJgOgppb2L+/+e2gVM1OIiLXVfUO1dXS8l1acoRdB1TOAhtLhPTW3tHwVfmThVmb+TkhkE+388F9P+/NVvzpyYnW1RYztoSMktK4TRCGdlyHymDWkFJQyCV+ub7PyZUuGadQGxHk3PLPu8830T4cnS2qd0m7VgFmjkrc9+7efTaIFi1K8tMLYE0dUWxuQQoBpyqLUstvnn39wWTQQi7QrguYYZdHyTeq68JJ17eFwQHRvBRwU73z1TueGJvmJdLpIqWSyJCOaNWuM+/LqaqjAuICB70mYBYMQlZWVIAIXeVtDGaLdYK01hIciSc/TAGKLtr3UtxOOkCApQSQgDUlLa+/0MkNwLSQzxE4/xB9Ndjz56rJNH6zji+LIFTqV0L7UZj6gOH5v4KKLPIFAmHdeH7Kv1U+vWfzylw2u9/3+TJlMmmqAqxlHlZtPnXPS5DFVoXrzo3snO36oSUkwCPHRvZMd1eGw+sfv5x/0xF9OWFI+LGdQKLSzEzTSM0y62/Xtbg7cj2CWVQ9ySbc8soXQgkhwMChWRcLMAN0Xdf35s03Zg8rzeUQi0gwzZSrrfHYWWLkh7VCop+5UgARgKs1JU7MQhlVWqq3ucszMkrTyed1GF+Xj/c3uN9e15J1/Rqh2JQAcf/Ah0wWRVfWmNdAt3ibsr5kghtG3E3Q3GWHXsm7f0bJq3lEVf9/5fUtefy+7pGTAxQxtsmaDiCEkkYJWxUV5hb/71c9uIKLf2GGiSs/uuP/hZ+YNGVxc1k1+2FUCBIYN7n4EtFXMTGSRTQRbHM1DB5cefc7vLh8EYBMAXvXll28eMnMy+7xuadPb6Fu2l6bAIVpa2+tszZ4EoGwJC29Yv7l+yoHjThaiZ/Pr/ih0N0+w+hFu2f6Bnf8zegtLa23Rcu1fjp90xMiGqyZmxy8uH3rML4hCT6UVB/qNCqOuDuhuUGrLL6wGpfWaaHnqX1cedsqg7I6D4/GEchhSRuO05cUVqeUAEAiHNWqtY91z2zdXD8rJOnR8due4zmjCLMzYVnBQsXj7wSsPv4KqXr/d/g6irqZC9BZJF6xqoMpKS/JiESeD3a//fcz14/Obfi/jTZzSrP2Zec7FX7nrFtz01l07i7HD1asJADqS/lBjNDbHC5LJrnY1bZD3V//645Gvja8OP80MgboKGe5VQREAsLx1nZi6YHkqFArpf/1hxnUTB8RmRzralEM6jA2tbvOlj5ueAYCtxcv7IAApLL0gkYCQhE73IE1kpc523UzCQmtVofr7B14/66TKIdnzou0tyZHZHUPOHrDicSKcsDRYYYR2Km8Lh1cTEfDyJ51/KPBnv17siBqdkQ410q9Kzzms4PWDD6g+asqC2pVYsFOz2d5raxFbOoTl+q5LDz9i9ojOR8cW68KMM8ctefj17UfX1KxZV1NTIYB6iwSxqwmtJipkDC5yONY/UWGEd2qIuicWbixkA5B277B0AQl3e1hixCgU0vzyXKoJrqZQ6Pk6ZA2e+tIVI4JjB3jOKc1o8Sa6mlNamTvJION2r7r0w2wRFQwGhCDJknqOBbCplMuQUvhyjS8afJtWbXNdedp1rz8KAN8+WOEe8su6RM3pBzVZ+kKGtH0Da5sd3k+pVindPaF9dzvAnhEOgsi1dCkbQ4bAWL8eZmPjKhEIjNMLFlxx7fjxo35eVJhTYJpKk0y3tmEJATXloHFnLXro+duFEKtqa2ulPbtDTpk07iwpwFppi4zVdgKbgGg8SevXbWRDSIvX7R2iskULWT8a3gw3jRxSSt1pDCLY001VYUGO5yfHHXsKEf2NmY2RI0eu+MkJx2z0eQcM1lpr0WfoiT1oSkpiBrZtanizt3YvLWF57Y233jn8sENUdlaG6J4Twr2eLIv5J1ODGxubn7MZ7z4AIrAqzJMnz/cOyuy8L1NtSo3MEp6yXAq/c+sRy9ZsF/844/oZL1FVqC9pFO6TzRbha48886CBkUU+0c4p1qbLm+Vas9X9xgsvvNDJdi86EFBbG8bit9A4o/zQX3unliwb6m8w4vFkqsi1zXvCxILbhi+sOvrNL/Qfieo/3WUNa8ham+cWHltV4my766CBrWPikSadZNZZWTmOVW1Fn738qTzZasvUtx1/ddhCSkShd99cWLnkkLLMIzva21OZotE5a7hR+/qtJ5xNNPEhILQribY65tBjci45IXXlhILmy0S8WSnFypmR7fx0Jf9r4aMfrN7laM10wYLYc+F1HSo1cz2dd0rsNyVZ2StHZCQz4tH21Ixhmcc/f/2xv6y68sWHdm6Hn0bsRKE3Z46df5K3qOBZn9wio5GO1NgsLsly6Xdf+EvVvW9/lbyNKLQRu2pZFarH5b+oGDJ7JF08pjD62yJ3K1q3dcWOOWD4yKb46IeI1syqDRYKAIibcZgpH0AmsyZIgZYNO3Zspqod5g9wH7sHPVIKS0RLBMVsFcYRRDKV0Fke85CF5x5aQfMW1wNWpcYBJ4fb5l+54aIrfjnjsXkHFFw9Msd1rNctoXWC+wihu1e/J6km0uFdmkHVppak4fFnynUt/viO9uyrAndHFjV/9Xon1wbkKqySQ6vr4/gViUeunHaK35Vgq5jf5mHJbnwr9ifl3qsjdLqu0C7o74rFeO6RZDIzhg6l7jm6ixbd2F59yom3FhVOu05YOkEBgjWpSmvK9PvEtKlj72Hm2YFAgIhIXfiHq8YOLC6osvOlgghWgbvWSpIhP/105ZJTf372ucMGDqXmaKu2SNi0JZCIA+zU1NHUxLNnV5Xcdcu1/ynMz/JozZwmktLdoocOLjsdwG0AUmvWrEls39H44aDSAYNZa4atuukpHbLaOzY0tphvfvDhe70dXygUSvdSWHnp789ZlZ2VMYFIdM8NJtv5mazZgJRbt26PPPbcC+/ZDlCFQr1GtYXAA88cK9lYNVj6chyJ1uaUQ22maQMzZ43I8876+M6lX6bMyiVfbE6uyx04/MOtje3CYwid7SEP4tvmDsx1zB6W1zrFpVqRiCdTWX6/a01H0Y7XV8Sus1pd9Tiy6moom8l8vzj7iGMxeuCLozKbHB0dHaYUm+jQ0syjh2RnVMydMPvNb3fEv1Kewtedbn+r2zDQtP3b8mH5GJvhxewi37aD8p0RdLV3pUBATk6OY237gM9Wdg464p5nFzXdXRMUtItWTjU1AAchblrvPq8ou2jZcJ9Z3NkVS+Ub2x25hfr+lfe+de7Wloo3RUbx4o4EWUmteFNxgScxK8fTfsKwnEiZGW1WSiuVlZnt/HBr9opn1pWex7XFEoGw2llzZ83JtS6mVntGEFrpiQrj7ifrNx0y+rCLh4wvug9qqzKSO9SkUsfCy385e/lh19avqA0EZHW4B+EShfTSYIVRddlLLy678/gTh/n0MznuRkesK5IsNBIZJcNzLhmW7ztn7oTKZZua499kZhS+5svOavc4NW1Ys/bIAXnG1AH+5KHDcmK+VKxdJxLK9Gdlez7ZiNjWhsh11kwQS05kmoBSlnOPmyZKM2OuT24/5DaH250UVl6wFxNo2nOQNaAFtFDplYFDkPZ5PWJdu/8LQ0oJkLSqFLtLdoTo6kpxobtjbGBG7pKxQ4545LH36PLx1eEGou6h5R/eABz3ROioowYWeO7y5CgJfN6dAwQJG9GQVa2RriGxtdMSSeX1uIxOnYtPdvifeG558i9/+9erq9KVId1T4i6dN2nmkMQtowq6KjjZbs907jUdTVgOfH+Y1ppNUzEAVlr1SMJZMKBZq+/SzVVVlYqZxaz58+8eOfKBCweVFuabpqmFINKWApy01mb5qOGHPvbYiz8hoqcA4MR584/Ny8thAIqhDKWJmRmCrDTBt99svXPz2k/WbFn36fey3FIQnn501do/Xnb+ssLcnDnMSmmtJfck6XRJSdH4G//xwFQiegsANm9t+M/UA/FTAlgpxb3HoTKzFkKIzkhk1a03Xrmzdo/tUNbcsn3HshHDBx6grR7tIl31w8zQWmlNJNrbIx8vDj/YsrP+jwAOBiGeD90UubB1QpXjqNJ/jMl3zHEkGxHtaEo6GTQ2yzXG4fSOKS/2IGauRSrPSjY7BSPDSIDMJiS6YkmThMjMynZsjA/Y+NLn6uc3PfrOV/Yc275IrDqcdoL/Cf16elXgkOJbhmU6p5jRFnR0NiUy0eYdkO+eO67INzemmy5UuhlCAI5iBQ/FoRMRxBIJM5ICu11uBzvz8Oa3vuUfbs6Ze+k/FjXVBgKSQiG1O+cyLhCQfwiH17adMfX8X1eV3js0s7GgM9JhUmwrj/G7p4zNzZgSUesvTiqrbtglGB4ZhxnrRCISTwohHb6sAvlJY+7K2xdv/8Uji+uiw4cHRah6FyEta61MU2llQrHW27ZhD51gvWmH8Pcv/cfhJx1SljWvs60lXuxvyj16fM6iGxkzA7Xl3PMw289AqN5cGqwwZp3//IuPBI8+cVqp8+7B2e2lXdEOnYo1pgZ72v1jcr3zUkPciKuGC021A0TApMkmDN2JRCyKeKeZkIbD5c8qdH7dkre89p3O397w+DvvJoohxrUu17CEKqztfhCJJHOuO5ZZlq3PJWFpLEFWtyzYw9w02zN9maw+BGSdutYabq8XLZ2JZQYL+2WEnqoNIghiiscjnG1EjTkjcn45LN93xHEHHn5b9TWf3z3vwsWR2mC5M1BZoKnqP/9B6UXj7/h1QgaDEJbA0A0GaSayO4JKe0qcBUtcTkM6PAXGmmbvyrXNvj8cd8Urr6Qd3/zfL07Mu3Bx4vgjp5RdMCfrkhH5LWeXZrR7I10RBUjJdg2/RYBoWxSD/cKCpJIJw+PxEABhSIN20tmR4TR2wRgS19UtlW/9+9+tH3+64tZBpYdfZxiG6itOhiEEMGPmwXffcMO9r11xxYJY6aCBF9ivEbJv41C5bVvj9vvvX7iYOSiqq1dTeXn5bj3guHHjjFWrVpkff7ri6YMmjjlSQoqdc4c+rwvz5lSceTmwjAh4p37ZO0dUzODMTO/uWDpqam55F9Z8Edk372Pd+N98vf6NikOmnG/3daS+qQRJAKi5tXWZfW2MncOfUAi6BqDbnv185W3Pfj73xRvnnjo023HZAF9kot+ZhJmKIxbvVCTalc8KGYiZmZNCJpNMhuGQHn+WsyWRgS93+J97eZW+JHT3G+tqd9EQYRdO8O3g/RWznr8u86oROc7fDc1J+CVHEU/FNSe6tEuyEiAibQ0yjmuSQhjSk+E34tqDde2+tWtbPDcf96fXHgAQS8+u+L57qzocVna4+mxW9kkrK0fKf40qzJqeKToQj0XAyQbTKbQy2NYCMCGmyXA6nDIju8C5pdODt9e5nzj7+fwzN7+3NGY9a7vrmmz6pEfIDBZoTghvh6dtjxFCzapyZmaqOfvoBYUZWV+MyUpkJGPtqBjhnf506IgbiUJ/+M7Mk15OsCr0ykvn/WLeR6cc6LyxNNN/RklWzEXJTnR1dWigxTSI2bCLxFIQUglJTrdXCEeGa3unp+ObDa5//vLBTTWbV69uSYf36ZkgDCl9XqdwOwzhsOcXpVJx1S1c6O7+Qn1mpFN3X08rNGOtlY4Lp5NSXYZpulw+r1vEE2YqpQ1B0qr9Ynv2g6mYO9p26DKHLC0Znf+3928fd+r7a+gv1aGlzyAE8EfnOMSUm2MXhHoo/XgiJRzS4WC2FHHCwuKaJMPvz5XrO7JizZ3ZVx0XXH/vjh1v9poStzgBwPdUzRFnjMiPXj2yYEdxsqsVbe1QQhqyJ2Fv57q0qZwOKbV2ZPcowH98ImCVrXFLmGbzJ5+tjmX5PdK0JrylAatJIG5qbt1hh4Q7ocAqFQwGxTV/rLk7Ly/rnML83IHKVClmkLY1kGCYDoeRmz9wwBmn/PrK+vaOztKvvl6X1KxF7walRCTXb9z2YH19fRyok+HwDw5TTzEz5lQveHLiAWOvzMnKKE2apoIGaSYobbLDEHrT1oajJ02aW/DZZ/9pXLgw9NUJgeM/LsjNmqi11rDYQCilQZI0a82frPjyBcvhhXeqgLAc2bNPvfTO2LEjm3KzfdlKsSJpCRNsAkSZWtOHH37ypv0ZvDtNXzAI8edroY+9fPGjQMWT/7om/8Sh+cnjvSJ5RFaGzPXJlNPrNEEwoUGImU7EUo5UpFNvi2nnqx+sMZ//7a2vv5AmVn5I2FxtzxA5ORyOH/8nXHVC1bgHz6gaUD0wx3uC18EHZXpg+F2mYZBFDiZMA11Jw2yP6DYVcS7dHPE+G6oVTy9f/lIXkdX4wR6mtEcIqzYQkNW3hb8BMOP5v/3k+GKv61yfkXlolkf7/E5lEEwwE0xtoD1pqPZ23tEUdb2xcovj9otu/c+7adZ0lzNMVlkbZYSKPmyNu53RRBdtjGbLcUPz97gFRCgU0jXjVsvQfYs3jxs6f4HSJTdlOiJfOdoNLi4eMPGKK67Iq66+oZl30W+6KlRv2tdg+13/xC/uvPTYhcMHuBfku91HZ7io1Oc0nR4jBWEoaEXoSDgQiRspihkfrmmQ73+6w3tr6O5/r0tLYqpDYdP6WkEGQkiQp3N9Z+6KjfFEWTylM5h79yawu8EQ9zSMQE+/gnQzjLRWy+/zNjXGM7bSdb85ZvzMkbGHDh4cmSzNZsTjcZMhDSuq4Z6qC8UshFIut8doSeViY3vWwy9+kvzb9Q/Ud4+9qwrVawb4mIqKokuPd78+o6ypPBltQspMmV6vz4hRAT7b4qz7YK33vCvufvkLArCiVweYR/90zBEDs1rvnFAaG+VQLUikkibDIYmI+ko2lHYIwOPLFFsjBR11X3lv+NX1r9yAmiDRvqrPPaUDs7P8RvqQbngQRwyAB63bdjQCm2Pfo6BhADlDxs7IbG9r596cUCwWRxzAnFkz4wCiK9d+kRePAS6XJovxdcNjVaJh3eq3N2OvZhwMKCifPN7T2hrrOTCAeCwGlyuLcr2l21avTs/AKM0dVj44IxaPAzFY3zEOxLiL4nHBiK/bhB9sqJ5fnD2gwEkJYriBtCSBWVNbokOjde1m7GFTdq4NSFEd7pWxKsm794b5vpa1H04typRFvgxDJxOmaEs6NhYNmvp5dejtdrQub7dvbqqpIQr9uKlgxFbjhW6Hec7p8wcdOsab2bZtzey8LDebnKQdramOA6fPffOqu+oS77///o7e50vVu+9I/UOyj2uvRVozhVOOO65k7kRVnIjsmJbplWwq0NamuFkw6MClZ/79g2Z0rG5JC8aJQvwjjyn3JkLqxRhnAWjvOfcfrvCwZC/B3huD74bLT88zIutG+2R0pMfj4La2LioZVF731peI3PZwuHtmsO1H1Pd8RwIKitxuc5+az8TjZhTojHRrVJ64puL8CWX6j8NyowOS0WY2U1qzkNKCj71yi2BtsGaXN0t+25mVWt/mv/nqJ5pvWr58eRMzU7i6WlSHw6q8vNx5y1lllw7L7ri0yJfKWdPk+vbzzZ6rfnH9ksfS4e4xv1+cYAb+8ftjhk0bFr9+WG5XdbZsRiweNU3uqQpJR1hWL8+Udnvdsi2Ri5Vb3C+/9W3OBdfd9+K3ezDy7/+E9ZET7/2H0N5UtxCw/77/HpzDDx5vLxaDamsDImDrzPbEaYbDVni5t9+zp/HCD88b4dqArFvVQJWhekX7Ya1rawMyYM031j90XKwq5z3d3INBiDTpbk9w3cu1CYprQyGtgxA9szT2fJMJBoOiZtxq6rux7cZhhgOiZlWYf+jz98sD1lsYywySwqraPPTQQwuuOcF7UbGv/YpRuZ3U1dWplU2KpIeDp+cDQGnlcBrS4S3Eqgbf1o1tGb8/6coXwt27+clhxQzcGzx90KiieEXVn2NPY9tLXcwBiboGoqp6E5jge/XmsguGZHYGB2e2eWLRNm1as3wEd0uo7dhdK9PhlAY7c7F6h/vrjzcYl56/8M0X9zT0+TEX7XvCgz3ZfSkYDNIPfcYPHGfvUCwzBWtqaA8/94fOU+/n4/3o+zMYDNK4caupd+uqxnGFvGpVOe/htfjRzrAGQdShTvTIQwCgUteEQkz472yw/+Xj7uvGuD82VgoGQeNWB6igV6usSlTq3o0JfsT5ILiP3RZCvdo39ob0CgAuO33mlBOmOi8alNX1szxHCxLxLlOzNT7EqgMWdtcYAKyUx+uVcZGPLxucr3/RnHHRmdc8vyKN8uZduLi7hVPvhqfP33DinNLMljvHFkVHmrEWJFOmghBW+0xOd2BhaKW0lIDHlyW+afG3N6cKLqu6YPW/gDUJ5qCoqfnRC9hv/dZv/QbszN71akipAGDh72b9ZPZo+afR+R0HymQL4kmlYFhtO7kP68QsBbTX65ebI5nm55vlE099lXfJI48828C1AVkXbXBU/ao+DgB3XHHsiIMGdv51aE4kkCnbEE8kFGBYLc5sRQVgzboVUNrj8cntsSysb8tY9ERd9Pp7n39/PRHw5E/76pH6rd/6rd/2yQH2geTjAmQ5wsHuJ2qGXz55MC8YnNVRHI+0QSmlQEL20jhb3Y+1qSVBOD3ZWNeRuW3lDvffTrnq9VsARkXgvIwLxn1y/YTi1FllWe3uWFdEaxgQQqbnKsEeOMLESjldLoMduVjd4Hvvk63G5b+57rU39zBJ2m/91m/9tvcOMG21tQF5yslhpRm4+JxT8+eOalk4uiB2eomvlaLRTqXtxuoWemS7QQuDtDJdTsNIOnKxtjnjncbW1OulBfSz4dntw82uNiSVVtYot+52KzaU1MowpHT7c/BNg69tW2fGZUde+so/AaR2N/6w3/qt3/rtv+IA069ZGqyQ6RrAf1x69CEzhyRvKS+KT3GYTYjHY6aClOlxIuk+gVprFtDsdnsFGW5oM4p4PKk0hEjPpe0hObSW0NrnzTS2xXISWyMZt9/xcsMdj738yYb+cLff+q3f/jcdIIAeqtrOD9K/gkecP6EkceXI3I4Ss6sFKROKpDXVB9zT1glgLQVrhhQAi7Qe0VbXsICpXG6HEeM8bI5mvVD/Ff7y+4Wvfwjsm9aq3/qt3/ptvznAbkcYDArUhJgIPHnUqPwbzik7d2hu5Pel3rbcrminMmEIKSVxeuYEyJ7hodMtbKy2qkopwyDp8ORgXYv/m083GDeecX3d/YCV59sTXVa/9Vu/9dv/UQfY7Qh7yWauu+DIMTOHJRaOLYjO84tWJBIJE8KQEIK4u6+UhQm1Zk3Q5PP5aWNbZnxti/e2ix/s+NuXX37YzLWQWBVk2t+zBPqt3/qt3/anA0y/v3d+8JGrjjppZFHslgkDomU63oKYYkXCrvS3YJ/2eL2yzczF2mb3868uj13354fe/RDYv2Lmfuu3fuu3/xMOEEC69IaZiHhU8aj8e68c8ZthWZ0Xl/o7cjojbVppzS6XQ7IzD+ua/StXbHFd+fPQKy+lw91+WUu/9Vu//X/ees9yuPY3R43+6N65D2x4aBpHnzyQv1g0c8czf6n8E2C9xpoEBtG/av3Wb/32/xSqXLq0ZxrUbRcd+vPFC4/9x7nHzyoDrHTgj5z+1W/91m/99l+x/x/QKxVmbpXrGgAAAABJRU5ErkJggg==" alt="RawSource" style="height:24px;display:block;">
+  </a>
+  <div class="site-search">
+    <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search chemicals, CAS numbers, applications…">
+  </div>
+  <nav class="site-nav">
+    <a href="https://rawsource.com/shop/">Catalog</a>
+    <a href="https://rawsource.com/industries/">Industries</a>
+    <a href="https://rawsource.com/services/">Services</a>
+    <a href="https://rawsource.com/contact-us/">Contact</a>
+  </nav>
+</header>
+
+<div class="breadcrumbs">
+  <a href="https://rawsource.com">Home</a> <span class="sep">›</span>
+  <a href="https://rawsource.com/industries/">Industries</a> <span class="sep">›</span>
+  <span class="current">Agriculture</span>
+</div>
+
+<section class="hero">
+  <div class="hero-bg" style="background:linear-gradient(135deg, rgba(12,30,61,0.92) 0%, rgba(21,47,92,0.78) 50%, rgba(12,30,61,0.88) 100%),url('https://rawsource.com/wp-content/uploads/2025/04/Agriculture.webp');background-size:cover;background-position:center;"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Agriculture</h1>
+      <p class="tagline">Raw materials for agrochemical formulators, fertilizer blenders, seed treaters, and livestock operations. Sourced in bulk, shipped to spec.</p>
+      <div class="hero-chips">
+        <div class="hero-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>81 Unique Chemistries</div>
+        <div class="hero-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>10 Product Families</div>
+        <div class="hero-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>5 Application Segments</div>
+      </div>
+      <div class="hero-ctas">
+        <a class="hero-cta" href="#" onclick="document.getElementById('rfqPanel').classList.remove('collapsed'); return false;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Request Bulk Quote</a>
+        <a class="hero-cta-secondary" href="#" onclick="switchTab('families'); return false;">Browse Product Families →</a>
+      </div>
+    </div>
+    
+      <div class="hero-photo-label">Crop field operations</div>
+    </div>
+  </div>
+</section>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" data-tab="overview"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Overview</button>
+    <button class="tab-btn" data-tab="problems"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Process Problems</button>
+    <button class="tab-btn" data-tab="families"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>Product Families</button>
+    <button class="tab-btn" data-tab="procurement"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Procurement Support</button>
+  </div>
+</div>
+
+<div class="tab-panel active" id="panel-overview">
+  <div class="panel-inner">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <h2>Bulk Agricultural Chemicals — From Adjuvant to Application</h2>
+        <p>RawSource supplies the raw material backbone for crop protection, fertilizer manufacturing, seed treatment, post-harvest handling, and livestock sanitation operations. Our agriculture portfolio covers organosilicone adjuvants, formulation solvents, nutrient salts, chelants, biocides, edible coatings, and silane coupling agents — sourced globally in drum, tote, and bulk vessel quantities.</p>
+        <p>Every chemical is cross-referenced to its subsystem application. Whether you are formulating an EC tank-mix adjuvant, blending a fertigation-grade micronutrient, or sourcing a peracetic acid sanitizer for a packing house — the catalog is organized so you can find the right chemistry for the right operation.</p>
+      </div>
+      <div class="overview-photo" style="background:url('https://rawsource.com/wp-content/uploads/2023/06/wetting-agent-ag-photo-2.jpg') center/cover;"></div>
+    </div>
+    <div class="supply-categories">
+      <h3>Supply Categories</h3>
+      <div class="category-pills">
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','row_field')">Crop Protection Adjuvants</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','row_field')">Solvents & Carriers</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','row_field')">Fertilizer Chemicals</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','row_field')">Soil Conditioners</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','row_field')">Seed Treatment</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','postharvest')">Post-Harvest</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','specialty')">Irrigation Chemicals</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','livestock')">Animal Ag Sanitation</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','infra_mfg')">Silanes & Coupling Agents</span>
+        <span class="cat-pill" onclick="switchTab('families'); switchSegment('B','infra_mfg')">Manufacturing Process Aids</span>
+      </div>
+    </div>
+    <div class="overview-cta-row">
+      <a class="btn-primary" href="#" onclick="document.getElementById('rfqPanel').classList.remove('collapsed'); return false;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Request Quote</a>
+      <a class="btn-ghost" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Agriculture Catalog</a>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-problems">
+  <div class="panel-inner">
+    <div class="section-eyebrow">Door A</div>
+    <h2 class="section-title">What problem are you solving?</h2>
+    <p class="section-desc">Select your application segment to find the formulation or operational challenge — then see which product families map to the solution.</p>
+    <div class="segment-toggle" id="segToggleA">
+      <button class="seg-btn active" data-segment="row_field" onclick="switchSegment('A','row_field')">Row Crops & Field</button>
+      <button class="seg-btn" data-segment="specialty" onclick="switchSegment('A','specialty')">Specialty Crops & Horticulture</button>
+      <button class="seg-btn" data-segment="livestock" onclick="switchSegment('A','livestock')">Livestock & Poultry</button>
+      <button class="seg-btn" data-segment="postharvest" onclick="switchSegment('A','postharvest')">Post-Harvest & Storage</button>
+      <button class="seg-btn" data-segment="infra_mfg" onclick="switchSegment('A','infra_mfg')">Infrastructure & Manufacturing</button>
+    </div>
+    <div class="tile-grid" id="doorATiles"></div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-families">
+  <div class="panel-inner">
+    <div class="section-eyebrow">Door B</div>
+    <h2 class="section-title">Product Families</h2>
+    <p class="section-desc">Browse by application segment. Each family contains the specific chemistries we source — with CAS numbers, functional roles, and availability status.</p>
+    <div class="segment-toggle" id="segToggleB">
+      <button class="seg-btn active" data-segment="row_field" onclick="switchSegment('B','row_field')">Row Crops & Field</button>
+      <button class="seg-btn" data-segment="specialty" onclick="switchSegment('B','specialty')">Specialty Crops & Horticulture</button>
+      <button class="seg-btn" data-segment="livestock" onclick="switchSegment('B','livestock')">Livestock & Poultry</button>
+      <button class="seg-btn" data-segment="postharvest" onclick="switchSegment('B','postharvest')">Post-Harvest & Storage</button>
+      <button class="seg-btn" data-segment="infra_mfg" onclick="switchSegment('B','infra_mfg')">Infrastructure & Manufacturing</button>
+    </div>
+    <div class="families-grid" id="doorBTiles"></div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-procurement">
+  <div class="panel-inner">
+    <div class="section-eyebrow">Door C</div>
+    <h2 class="section-title">Procurement Support</h2>
+    <p class="section-desc">From spec matching and documentation to bulk logistics and regulatory guidance.</p>
+    <div class="proc-grid" id="doorCTiles"></div>
+  </div>
+</div>
+
+<div class="rfq-float collapsed" id="rfqPanel">
+  <button class="rfq-toggle" onclick="document.getElementById('rfqPanel').classList.toggle('collapsed')">RFQ</button>
+  <div class="rfq-head">
+    <h3>Request a Quote</h3>
+    <div class="rfq-head-actions">
+      <span class="rfq-badge">Agriculture</span>
+      <button class="rfq-minimize" onclick="document.getElementById('rfqPanel').classList.add('collapsed')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </div>
+  <div class="rfq-body">
+    <div class="rfq-field"><label>Chemical / Product</label><input type="text" placeholder="e.g. PDMS, Peracetic Acid, APTES…"></div>
+    <div class="rfq-field"><label>CAS Number (optional)</label><input type="text" placeholder="e.g. 63148-62-9"></div>
+    <div class="rfq-row">
+      <div class="rfq-field"><label>Volume</label><input type="text" placeholder="e.g. 2 MT"></div>
+      <div class="rfq-field"><label>Packaging</label><select><option>Select</option><option>Drum (200L)</option><option>Tote (1000L)</option><option>Bulk Vessel</option><option>Bag / Super Sack</option></select></div>
+    </div>
+    <div class="rfq-field"><label>Application</label><select><option>Select segment</option><option>Crop Protection — Adjuvants</option><option>Crop Protection — Solvents / EC</option><option>Fertilizer Processing</option><option>Soil Conditioning</option><option>Seed Treatment</option><option>Post-Harvest Wash / Coating</option><option>Irrigation Water Treatment</option><option>Animal Agriculture Sanitation</option><option>Ag Infrastructure / Silanes</option><option>Manufacturing Process Aids</option></select></div>
+    <div class="rfq-row">
+      <div class="rfq-field"><label>Full Name</label><input type="text" placeholder="Your name"></div>
+      <div class="rfq-field"><label>Business Email</label><input type="email" placeholder="you@company.com"></div>
+    </div>
+    <div class="rfq-field"><label>Company</label><input type="text" placeholder="Company name"></div>
+    <button class="rfq-advanced-toggle" id="advToggle" onclick="toggleAdvanced()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>Advanced Options</button>
+    <div class="rfq-advanced" id="advFields">
+      <div class="rfq-row">
+        <div class="rfq-field"><label>Destination</label><input type="text" placeholder="City, State or Port"></div>
+        <div class="rfq-field"><label>Incoterms</label><select><option>Select</option><option>EXW</option><option>FCA</option><option>FOB</option><option>CIF</option><option>DDP</option></select></div>
+      </div>
+    </div>
+    <button class="rfq-submit">Request Quote</button>
+    <p class="rfq-note">Technical support included · NDA available · Hazmat logistics covered</p>
+  </div>
+</div>
+
+<footer class="bottom-cta">
+  <div class="bottom-cta-inner">
+    <div>
+      <h2>Discuss Your Agriculture Requirements</h2>
+      <p>Technical team available for sourcing strategy, spec matching, and bulk logistics.</p>
+    </div>
+    <div class="cta-buttons">
+      <a href="#" class="cta-btn-accent" onclick="document.getElementById('rfqPanel').classList.remove('collapsed'); return false;">Submit Bulk RFQ</a>
+      <a href="https://rawsource.com/contact-us/" class="cta-btn-outline">Contact Technical Team</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const ARROW = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+const doorA = {
+  "row_field": [
+    {
+      "id": "a-rf1",
+      "title": "Poor Spray Coverage on Hydrophobic Leaf Surfaces",
+      "desc": "Organosilicone superspreaders and nonionic wetting agents reduce surface tension below 25 mN/m for uniform deposition on waxy cuticles",
+      "slug": "a-rf1",
+      "href": "/industries/agriculture/problems/a-rf1/"
+    },
+    {
+      "id": "a-rf2",
+      "title": "Emulsion Break in EC Formulations",
+      "desc": "Solvent\u2013surfactant\u2013water balance optimization for stable emulsifiable concentrate tank mixes under variable water hardness",
+      "slug": "a-rf2",
+      "href": "/industries/agriculture/problems/a-rf2/"
+    },
+    {
+      "id": "a-rf3",
+      "title": "Foam Generation in Tank Mix",
+      "desc": "Silicone and non-silicone antifoams to control foam in spray tanks, mix plants, and application equipment",
+      "slug": "a-rf3",
+      "href": "/industries/agriculture/problems/a-rf3/"
+    },
+    {
+      "id": "a-rf4",
+      "title": "Hard Water Deactivation of Actives",
+      "desc": "Chelants and water conditioners that sequester calcium and magnesium ions before they bind to glyphosate and other actives",
+      "slug": "a-rf4",
+      "href": "/industries/agriculture/problems/a-rf4/"
+    },
+    {
+      "id": "a-rf5",
+      "title": "Caking & Bridging in Granular Fertilizers",
+      "desc": "Anti-caking agents and conditioning coatings that prevent moisture-induced bridging in storage and blending equipment",
+      "slug": "a-rf5",
+      "href": "/industries/agriculture/problems/a-rf5/"
+    },
+    {
+      "id": "a-rf6",
+      "title": "Micronutrient Chelation & Stability",
+      "desc": "EDTA, DTPA, and organic acid chelants to keep iron, zinc, manganese, and copper plant-available in fertigation and foliar systems",
+      "slug": "a-rf6",
+      "href": "/industries/agriculture/problems/a-rf6/"
+    },
+    {
+      "id": "a-rf7",
+      "title": "Soil Structure Degradation & Erosion",
+      "desc": "Polyacrylamide, humic substances, and superabsorbent polymers that improve aggregate stability and reduce irrigation runoff",
+      "slug": "a-rf7",
+      "href": "/industries/agriculture/problems/a-rf7/"
+    },
+    {
+      "id": "a-rf8",
+      "title": "Inadequate Seed Coating Adhesion & Dust-Off",
+      "desc": "Film-forming binders and dispersants that adhere actives to seeds while maintaining plantability and reducing environmental exposure",
+      "slug": "a-rf8",
+      "href": "/industries/agriculture/problems/a-rf8/"
+    }
+  ],
+  "specialty": [
+    {
+      "id": "a-sc1",
+      "title": "Scale Formation in Drip Irrigation Lines",
+      "desc": "Phosphonate antiscalants and acid treatments to prevent calcium carbonate and iron oxide plugging in emitters",
+      "slug": "a-sc1",
+      "href": "/industries/agriculture/problems/a-sc1/"
+    },
+    {
+      "id": "a-sc2",
+      "title": "Biofilm & Algae in Irrigation Systems",
+      "desc": "Oxidizing and non-oxidizing biocides for biofilm control in drip tape, pivot systems, and fertigation lines",
+      "slug": "a-sc2",
+      "href": "/industries/agriculture/problems/a-sc2/"
+    },
+    {
+      "id": "a-sc3",
+      "title": "Fertigation pH & Compatibility",
+      "desc": "Acid injection and buffer chemistry to maintain nutrient solubility and prevent precipitation in drip-feed systems",
+      "slug": "a-sc3",
+      "href": "/industries/agriculture/problems/a-sc3/"
+    },
+    {
+      "id": "a-sc4",
+      "title": "Greenhouse Water Quality Management",
+      "desc": "Biocides, chelants, and pH adjusters for closed-loop and recirculating irrigation in controlled-environment agriculture",
+      "slug": "a-sc4",
+      "href": "/industries/agriculture/problems/a-sc4/"
+    },
+    {
+      "id": "a-sc5",
+      "title": "High-Value Crop Residue Management",
+      "desc": "Post-application wash and coating agents for specialty produce requiring low-residue handling at retail grade",
+      "slug": "a-sc5",
+      "href": "/industries/agriculture/problems/a-sc5/"
+    }
+  ],
+  "livestock": [
+    {
+      "id": "a-lv1",
+      "title": "Dairy CIP & Equipment Sanitation",
+      "desc": "Alkaline and acid CIP cycles for milking systems, bulk tanks, and processing equipment \u2014 caustic, acid, and sanitizer sequencing",
+      "slug": "a-lv1",
+      "href": "/industries/agriculture/problems/a-lv1/"
+    },
+    {
+      "id": "a-lv2",
+      "title": "Poultry House Disinfection",
+      "desc": "Quat-based and oxidizing disinfectants for between-flock terminal sanitation, foot baths, and water line treatment",
+      "slug": "a-lv2",
+      "href": "/industries/agriculture/problems/a-lv2/"
+    },
+    {
+      "id": "a-lv3",
+      "title": "Livestock Drinking Water Treatment",
+      "desc": "Biocide and pH programs to control bacterial load and biofilm in animal watering systems",
+      "slug": "a-lv3",
+      "href": "/industries/agriculture/problems/a-lv3/"
+    },
+    {
+      "id": "a-lv4",
+      "title": "Foot Bath & Hoof Care Chemistry",
+      "desc": "Copper sulfate alternatives and quat/glutaraldehyde programs for hoof health management",
+      "slug": "a-lv4",
+      "href": "/industries/agriculture/problems/a-lv4/"
+    },
+    {
+      "id": "a-lv5",
+      "title": "Odor & Ammonia Control",
+      "desc": "pH adjustment, oxidizing agents, and biological treatment additives for swine and poultry facility air and waste management",
+      "slug": "a-lv5",
+      "href": "/industries/agriculture/problems/a-lv5/"
+    }
+  ],
+  "postharvest": [
+    {
+      "id": "a-ph1",
+      "title": "Produce Wash Water Sanitation",
+      "desc": "Peracetic acid, hypochlorite, and peroxide-based programs for pathogen reduction in dump tanks and flume systems",
+      "slug": "a-ph1",
+      "href": "/industries/agriculture/problems/a-ph1/"
+    },
+    {
+      "id": "a-ph2",
+      "title": "Post-Harvest Surface Moisture & Decay",
+      "desc": "Edible wax coatings and surface treatments that reduce moisture loss, extend shelf life, and maintain visual quality",
+      "slug": "a-ph2",
+      "href": "/industries/agriculture/problems/a-ph2/"
+    },
+    {
+      "id": "a-ph3",
+      "title": "Gloss & Appearance Coating",
+      "desc": "Shellac, carnauba, and beeswax-based coating systems for citrus, apples, and other waxed produce lines",
+      "slug": "a-ph3",
+      "href": "/industries/agriculture/problems/a-ph3/"
+    },
+    {
+      "id": "a-ph4",
+      "title": "Controlled Atmosphere & Storage Chemistry",
+      "desc": "Sanitizers, pH management, and anti-microbial agents for long-term cold storage and CA room environments",
+      "slug": "a-ph4",
+      "href": "/industries/agriculture/problems/a-ph4/"
+    }
+  ],
+  "infra_mfg": [
+    {
+      "id": "a-im1",
+      "title": "Foam Control in Agrochemical Manufacturing",
+      "desc": "Silicone and non-silicone defoamers for high-shear mixing, grinding, and filling operations in concentrate production",
+      "slug": "a-im1",
+      "href": "/industries/agriculture/problems/a-im1/"
+    },
+    {
+      "id": "a-im2",
+      "title": "Rheology & Anti-Settling in SC/SE Concentrates",
+      "desc": "Fumed silica, xanthan, and cellulosic thickeners to maintain suspension stability during storage and shipment",
+      "slug": "a-im2",
+      "href": "/industries/agriculture/problems/a-im2/"
+    },
+    {
+      "id": "a-im3",
+      "title": "Adhesion Failure on Agricultural Infrastructure",
+      "desc": "Silane coupling agents for coating adhesion to concrete, steel, and fiberglass in tanks, greenhouse structures, and ag equipment",
+      "slug": "a-im3",
+      "href": "/industries/agriculture/problems/a-im3/"
+    },
+    {
+      "id": "a-im4",
+      "title": "Corrosion in Storage & Handling Equipment",
+      "desc": "Corrosion-resistant coatings and protective treatments for fertilizer storage bins, spray equipment, and chemical transfer systems",
+      "slug": "a-im4",
+      "href": "/industries/agriculture/problems/a-im4/"
+    },
+    {
+      "id": "a-im5",
+      "title": "Solvent Selection for Formulation Development",
+      "desc": "Technical support for carrier solvent screening \u2014 flash point, solvency parameter, and regulatory compatibility mapping",
+      "slug": "a-im5",
+      "href": "/industries/agriculture/problems/a-im5/"
+    }
+  ]
+};
+
+const doorB = {
+  "row_field": [
+    {
+      "id": "b-ag1",
+      "title": "Crop Protection Adjuvants",
+      "desc": "Organosilicone superspreaders, nonionic surfactants, and drift-control polymers that optimize spray deposition, leaf wetting, and active ingredient uptake in tank-mix applications.",
+      "slug": "crop-protection-adjuvants",
+      "href": "/industries/agriculture/products/crop-protection-adjuvants/",
+      "badge": "Available",
+      "roles": [
+        "Wetting",
+        "Defoaming",
+        "Emulsification",
+        "Viscosity Modification",
+        "Adhesion Promotion"
+      ],
+      "chems": [
+        {
+          "name": "Polyether-Modified Trisiloxane",
+          "cas": "27306-78-1",
+          "role": "Super-spreader"
+        },
+        {
+          "name": "Polydimethylsiloxane (PDMS) Fluid",
+          "cas": "63148-62-9",
+          "role": "Antifoam"
+        },
+        {
+          "name": "Octamethyltrisiloxane",
+          "cas": "107-51-7",
+          "role": "Carrier solvent"
+        },
+        {
+          "name": "Isopropyl Alcohol (IPA)",
+          "cas": "67-63-0",
+          "role": "Solvent"
+        },
+        {
+          "name": "Ethanol",
+          "cas": "64-17-5",
+          "role": "Solvent"
+        },
+        {
+          "name": "Propylene Glycol",
+          "cas": "57-55-6",
+          "role": "Humectant"
+        },
+        {
+          "name": "Glycerol",
+          "cas": "56-81-5",
+          "role": "Humectant"
+        },
+        {
+          "name": "Ammonium Sulfate",
+          "cas": "7783-20-2",
+          "role": "Water conditioner"
+        },
+        {
+          "name": "Citric Acid",
+          "cas": "77-92-9",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "Acetic Acid",
+          "cas": "64-19-7",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "Sodium Dodecyl Sulfate (SDS)",
+          "cas": "151-21-3",
+          "role": "Wetting agent"
+        },
+        {
+          "name": "Sodium Dodecylbenzenesulfonate",
+          "cas": "25155-30-0",
+          "role": "Wetting agent"
+        },
+        {
+          "name": "Polyvinylpyrrolidone (PVP)",
+          "cas": "9003-39-8",
+          "role": "Binder / sticker"
+        }
+      ]
+    },
+    {
+      "id": "b-ag2",
+      "title": "Crop Protection Solvents & Carriers",
+      "desc": "Glycol ethers, aromatic solvents, and polar aprotic carriers for EC, SL, and SC formulation platforms. Selected for solvency power, flash point, and regulatory profile.",
+      "slug": "crop-protection-solvents",
+      "href": "/industries/agriculture/products/crop-protection-solvents/",
+      "badge": "Available",
+      "roles": [
+        "Solvency",
+        "Humectancy",
+        "Chemical Intermediate"
+      ],
+      "chems": [
+        {
+          "name": "2-Butoxyethanol (Butyl Cellosolve)",
+          "cas": "111-76-2",
+          "role": "Co-solvent"
+        },
+        {
+          "name": "1-Methoxy-2-propanol (PM)",
+          "cas": "107-98-2",
+          "role": "Solvent"
+        },
+        {
+          "name": "Dipropylene Glycol",
+          "cas": "25265-71-8",
+          "role": "Co-solvent"
+        },
+        {
+          "name": "Dipropylene Glycol Monomethyl Ether (DPM)",
+          "cas": "34590-94-8",
+          "role": "Co-solvent"
+        },
+        {
+          "name": "Dimethyl Sulfoxide (DMSO)",
+          "cas": "67-68-5",
+          "role": "Penetrant solvent"
+        },
+        {
+          "name": "N-Methyl-2-pyrrolidone (NMP)",
+          "cas": "872-50-4",
+          "role": "Polar aprotic solvent"
+        },
+        {
+          "name": "Acetone",
+          "cas": "67-64-1",
+          "role": "Fast-evaporating solvent"
+        },
+        {
+          "name": "Ethyl Acetate",
+          "cas": "141-78-6",
+          "role": "Ester solvent"
+        },
+        {
+          "name": "Butyl Acetate",
+          "cas": "123-86-4",
+          "role": "Ester solvent"
+        },
+        {
+          "name": "Xylene (Mixed Isomers)",
+          "cas": "1330-20-7",
+          "role": "Aromatic solvent"
+        },
+        {
+          "name": "Toluene",
+          "cas": "108-88-3",
+          "role": "Aromatic solvent"
+        }
+      ]
+    },
+    {
+      "id": "b-ag3",
+      "title": "Fertilizer Processing Chemicals",
+      "desc": "Primary and micronutrient salts, chelants, anti-caking agents, and process additives for granular, liquid, and fertigation-grade fertilizer manufacturing.",
+      "slug": "fertilizer-processing",
+      "href": "/industries/agriculture/products/fertilizer-processing/",
+      "badge": "Available",
+      "roles": [
+        "Chemical Intermediate",
+        "Chelation / Sequestration",
+        "pH Adjustment",
+        "Defoaming"
+      ],
+      "chems": [
+        {
+          "name": "Urea",
+          "cas": "57-13-6",
+          "role": "Primary nutrient (N)"
+        },
+        {
+          "name": "Ammonium Nitrate",
+          "cas": "6484-52-2",
+          "role": "Primary nutrient (N)"
+        },
+        {
+          "name": "Ammonium Sulfate",
+          "cas": "7783-20-2",
+          "role": "Primary nutrient (N,S)"
+        },
+        {
+          "name": "Monoammonium Phosphate (MAP)",
+          "cas": "7722-76-1",
+          "role": "Primary nutrient (N,P)"
+        },
+        {
+          "name": "Diammonium Phosphate (DAP)",
+          "cas": "7783-28-0",
+          "role": "Primary nutrient (N,P)"
+        },
+        {
+          "name": "Potassium Chloride (MOP)",
+          "cas": "7447-40-7",
+          "role": "Primary nutrient (K)"
+        },
+        {
+          "name": "Potassium Nitrate",
+          "cas": "7757-79-1",
+          "role": "Primary nutrient (K,N)"
+        },
+        {
+          "name": "Calcium Nitrate",
+          "cas": "13477-34-4",
+          "role": "Secondary nutrient (Ca,N)"
+        },
+        {
+          "name": "Magnesium Sulfate (Epsom Salt)",
+          "cas": "7487-88-9",
+          "role": "Secondary nutrient (Mg,S)"
+        },
+        {
+          "name": "Zinc Sulfate",
+          "cas": "7733-02-0",
+          "role": "Micronutrient (Zn)"
+        },
+        {
+          "name": "Ferrous Sulfate",
+          "cas": "7720-78-7",
+          "role": "Micronutrient (Fe)"
+        },
+        {
+          "name": "Copper Sulfate",
+          "cas": "7758-99-8",
+          "role": "Micronutrient (Cu)"
+        },
+        {
+          "name": "Manganese Sulfate",
+          "cas": "7785-87-7",
+          "role": "Micronutrient (Mn)"
+        },
+        {
+          "name": "EDTA",
+          "cas": "60-00-4",
+          "role": "Chelant"
+        },
+        {
+          "name": "DTPA",
+          "cas": "67-43-6",
+          "role": "Chelant"
+        },
+        {
+          "name": "Calcium Formate",
+          "cas": "544-17-2",
+          "role": "Calcium source"
+        },
+        {
+          "name": "Citric Acid",
+          "cas": "77-92-9",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "PDMS Fluid",
+          "cas": "63148-62-9",
+          "role": "Antifoam"
+        }
+      ]
+    },
+    {
+      "id": "b-ag4",
+      "title": "Soil Conditioning Agents",
+      "desc": "Water-soluble polymers, superabsorbents, humic substances, and biostimulant carriers that improve soil structure, water-holding capacity, and nutrient availability.",
+      "slug": "soil-conditioning",
+      "href": "/industries/agriculture/products/soil-conditioning/",
+      "badge": "Available",
+      "roles": [
+        "Flocculation / Coagulation",
+        "Humectancy",
+        "Viscosity Modification",
+        "Film Formation"
+      ],
+      "chems": [
+        {
+          "name": "Polyacrylamide",
+          "cas": "9003-05-8",
+          "role": "Soil conditioner"
+        },
+        {
+          "name": "Sodium Polyacrylate",
+          "cas": "9003-04-7",
+          "role": "Superabsorbent"
+        },
+        {
+          "name": "Xanthan Gum",
+          "cas": "11138-66-2",
+          "role": "Rheology modifier"
+        },
+        {
+          "name": "Guar Gum",
+          "cas": "9000-30-0",
+          "role": "Thickener"
+        },
+        {
+          "name": "Sodium CMC",
+          "cas": "9004-32-4",
+          "role": "Binder / thickener"
+        },
+        {
+          "name": "Polyvinyl Alcohol (PVA)",
+          "cas": "9002-89-5",
+          "role": "Binder"
+        },
+        {
+          "name": "Calcium Carbonate",
+          "cas": "471-34-1",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "Calcium Hydroxide",
+          "cas": "1305-62-0",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "Gypsum",
+          "cas": "10101-41-4",
+          "role": "Soil amendment"
+        },
+        {
+          "name": "Humic Acid",
+          "cas": "1415-93-6",
+          "role": "Soil conditioner"
+        }
+      ]
+    },
+    {
+      "id": "b-ag5",
+      "title": "Seed Treatment Coatings & Binders",
+      "desc": "Film-forming binders, dispersants, colorants, and flow aids used in seed coating systems to adhere actives, reduce dust-off, and ensure plantability.",
+      "slug": "seed-treatment-coatings",
+      "href": "/industries/agriculture/products/seed-treatment-coatings/",
+      "badge": "Available",
+      "roles": [
+        "Film Formation",
+        "Adhesion Promotion",
+        "Dispersion",
+        "Pigmentation / Color"
+      ],
+      "chems": [
+        {
+          "name": "Polyvinyl Alcohol (PVA)",
+          "cas": "9002-89-5",
+          "role": "Binder"
+        },
+        {
+          "name": "Polyvinylpyrrolidone (PVP)",
+          "cas": "9003-39-8",
+          "role": "Binder"
+        },
+        {
+          "name": "Sodium CMC",
+          "cas": "9004-32-4",
+          "role": "Thickener"
+        },
+        {
+          "name": "Xanthan Gum",
+          "cas": "11138-66-2",
+          "role": "Thickener"
+        },
+        {
+          "name": "Glycerol",
+          "cas": "56-81-5",
+          "role": "Humectant"
+        },
+        {
+          "name": "Propylene Glycol",
+          "cas": "57-55-6",
+          "role": "Humectant"
+        },
+        {
+          "name": "PEG",
+          "cas": "25322-68-3",
+          "role": "Plasticizer"
+        },
+        {
+          "name": "PDMS Emulsion",
+          "cas": "63148-62-9",
+          "role": "Antifoam / flow aid"
+        }
+      ]
+    }
+  ],
+  "specialty": [
+    {
+      "id": "b-ag7",
+      "title": "Irrigation & Water Treatment Chemicals",
+      "desc": "Biocides, scale inhibitors, and water-conditioning agents for drip irrigation, pivot systems, and fertigation infrastructure. Prevents biofilm, emitter plugging, and mineral scale.",
+      "slug": "irrigation-water-treatment",
+      "href": "/industries/agriculture/products/irrigation-water-treatment/",
+      "badge": "Available",
+      "roles": [
+        "Biocidal Activity",
+        "Scale Inhibition",
+        "Corrosion Inhibition",
+        "Chelation / Sequestration"
+      ],
+      "chems": [
+        {
+          "name": "Hydrogen Peroxide",
+          "cas": "7722-84-1",
+          "role": "Oxidizing biocide"
+        },
+        {
+          "name": "Peracetic Acid",
+          "cas": "79-21-0",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Sodium Hypochlorite",
+          "cas": "7681-52-9",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Glutaraldehyde",
+          "cas": "111-30-8",
+          "role": "Biocide"
+        },
+        {
+          "name": "DDAC",
+          "cas": "7173-51-5",
+          "role": "Biocide"
+        },
+        {
+          "name": "Benzalkonium Chloride",
+          "cas": "8001-54-5",
+          "role": "Disinfectant"
+        },
+        {
+          "name": "Hydrochloric Acid",
+          "cas": "7647-01-0",
+          "role": "Descaler"
+        },
+        {
+          "name": "Sulfuric Acid",
+          "cas": "7664-93-9",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "Phosphoric Acid",
+          "cas": "7664-38-2",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "HEDP",
+          "cas": "2809-21-4",
+          "role": "Scale inhibitor"
+        },
+        {
+          "name": "ATMP",
+          "cas": "6419-19-8",
+          "role": "Chelant"
+        },
+        {
+          "name": "BIT",
+          "cas": "2634-33-5",
+          "role": "Preservative"
+        }
+      ]
+    }
+  ],
+  "livestock": [
+    {
+      "id": "b-ag8",
+      "title": "Animal Agriculture Sanitation Chemicals",
+      "desc": "Alkaline cleaners, quat-based disinfectants, and oxidizing biocides for dairy, poultry, and swine facility CIP, foot baths, water treatment, and equipment sanitation.",
+      "slug": "animal-ag-sanitation",
+      "href": "/industries/agriculture/products/animal-ag-sanitation/",
+      "badge": "Available",
+      "roles": [
+        "Biocidal Activity",
+        "Detergency / Cleaning",
+        "pH Adjustment",
+        "Corrosion Inhibition"
+      ],
+      "chems": [
+        {
+          "name": "Sodium Hydroxide",
+          "cas": "1310-73-2",
+          "role": "Alkaline cleaner"
+        },
+        {
+          "name": "Potassium Hydroxide",
+          "cas": "1310-58-3",
+          "role": "Alkaline cleaner"
+        },
+        {
+          "name": "Sodium Carbonate",
+          "cas": "497-19-8",
+          "role": "Detergent builder"
+        },
+        {
+          "name": "Sodium Metasilicate",
+          "cas": "6834-92-0",
+          "role": "Builder"
+        },
+        {
+          "name": "Benzalkonium Chloride",
+          "cas": "8001-54-5",
+          "role": "Disinfectant"
+        },
+        {
+          "name": "DDAC",
+          "cas": "7173-51-5",
+          "role": "Disinfectant"
+        },
+        {
+          "name": "Glutaraldehyde",
+          "cas": "111-30-8",
+          "role": "Disinfectant"
+        },
+        {
+          "name": "Peracetic Acid",
+          "cas": "79-21-0",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Hydrogen Peroxide",
+          "cas": "7722-84-1",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Sodium Hypochlorite",
+          "cas": "7681-52-9",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Sodium Lauryl Sulfate",
+          "cas": "151-21-3",
+          "role": "Surfactant"
+        }
+      ]
+    }
+  ],
+  "postharvest": [
+    {
+      "id": "b-ag6",
+      "title": "Post-Harvest Coatings & Wash Agents",
+      "desc": "Oxidizing sanitizers, edible wax coatings, and surface treatment agents for produce wash lines, packing houses, and controlled-atmosphere storage facilities.",
+      "slug": "post-harvest-coatings",
+      "href": "/industries/agriculture/products/post-harvest-coatings/",
+      "badge": "Available",
+      "roles": [
+        "Biocidal Activity",
+        "Film Formation",
+        "pH Adjustment",
+        "Chelation / Sequestration"
+      ],
+      "chems": [
+        {
+          "name": "Peracetic Acid",
+          "cas": "79-21-0",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Hydrogen Peroxide",
+          "cas": "7722-84-1",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Sodium Hypochlorite",
+          "cas": "7681-52-9",
+          "role": "Sanitizer"
+        },
+        {
+          "name": "Citric Acid",
+          "cas": "77-92-9",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "Sodium Bicarbonate",
+          "cas": "144-55-8",
+          "role": "pH adjuster"
+        },
+        {
+          "name": "Shellac",
+          "cas": "9000-59-3",
+          "role": "Film former"
+        },
+        {
+          "name": "Carnauba Wax",
+          "cas": "8015-86-9",
+          "role": "Gloss agent"
+        },
+        {
+          "name": "Beeswax",
+          "cas": "8012-89-3",
+          "role": "Barrier wax"
+        },
+        {
+          "name": "Lecithin",
+          "cas": "8002-43-5",
+          "role": "Emulsifier"
+        },
+        {
+          "name": "Polysorbate 80",
+          "cas": "9005-65-6",
+          "role": "Emulsifier"
+        },
+        {
+          "name": "PDMS Fluid",
+          "cas": "63148-62-9",
+          "role": "Antifoam"
+        }
+      ]
+    }
+  ],
+  "infra_mfg": [
+    {
+      "id": "b-ag9",
+      "title": "Agricultural Silanes & Coupling Agents",
+      "desc": "Amino-, epoxy-, vinyl-, and methacrylate-functional silanes for adhesion promotion, surface modification, and composite reinforcement in greenhouse, tank, and equipment coatings.",
+      "slug": "ag-silanes",
+      "href": "/industries/agriculture/products/ag-silanes/",
+      "badge": "Available",
+      "roles": [
+        "Coupling",
+        "Adhesion Promotion",
+        "Crosslinking / Curing",
+        "Surface Modification"
+      ],
+      "chems": [
+        {
+          "name": "APTES",
+          "cas": "919-30-2",
+          "role": "Silane coupling agent"
+        },
+        {
+          "name": "GPTMS",
+          "cas": "2530-83-8",
+          "role": "Silane coupling agent"
+        },
+        {
+          "name": "Vinyltrimethoxysilane (VTMO)",
+          "cas": "2768-02-7",
+          "role": "Silane coupling agent"
+        },
+        {
+          "name": "Methyltrimethoxysilane",
+          "cas": "1185-55-3",
+          "role": "Water repellent"
+        },
+        {
+          "name": "(3-Mercaptopropyl)trimethoxysilane",
+          "cas": "4420-74-0",
+          "role": "Silane coupling agent"
+        },
+        {
+          "name": "(3-Chloropropyl)trimethoxysilane",
+          "cas": "2530-87-2",
+          "role": "Functionalization intermediate"
+        },
+        {
+          "name": "TMSPMA",
+          "cas": "2530-85-0",
+          "role": "Silane coupling agent"
+        },
+        {
+          "name": "TEOS",
+          "cas": "78-10-4",
+          "role": "Silica precursor"
+        }
+      ]
+    },
+    {
+      "id": "b-ag10",
+      "title": "Agricultural Manufacturing Process Aids",
+      "desc": "Silicone antifoams, rheology modifiers, and processing solvents used in agrochemical concentrate manufacturing, blending, and granulation operations.",
+      "slug": "mfg-process-aids",
+      "href": "/industries/agriculture/products/mfg-process-aids/",
+      "badge": "Available",
+      "roles": [
+        "Defoaming",
+        "Viscosity Modification",
+        "Solvency",
+        "Coupling"
+      ],
+      "chems": [
+        {
+          "name": "PDMS Fluid",
+          "cas": "63148-62-9",
+          "role": "Antifoam"
+        },
+        {
+          "name": "Hydrophobic Silica (Fumed)",
+          "cas": "7631-86-9",
+          "role": "Rheology modifier"
+        },
+        {
+          "name": "TEOS",
+          "cas": "78-10-4",
+          "role": "Crosslinker"
+        },
+        {
+          "name": "2-Butoxyethanol",
+          "cas": "111-76-2",
+          "role": "Solvent"
+        },
+        {
+          "name": "Xylene",
+          "cas": "1330-20-7",
+          "role": "Solvent"
+        },
+        {
+          "name": "NMP",
+          "cas": "872-50-4",
+          "role": "Polar aprotic solvent"
+        },
+        {
+          "name": "DMSO",
+          "cas": "67-68-5",
+          "role": "Penetrant solvent"
+        }
+      ]
+    }
+  ]
+};
+
+const doorC = [
+  {
+    "icon": "search",
+    "title": "TDS / SDS Library",
+    "desc": "Technical data sheets and safety data sheets for every agriculture chemical in the catalog",
+    "href": "/services/tds-sds/"
+  },
+  {
+    "icon": "check",
+    "title": "Spec Matching & Grade Selection",
+    "desc": "Viscosity, purity, particle size, regulatory \u2014 our team matches your spec to the right grade",
+    "href": "/services/spec-matching/"
+  },
+  {
+    "icon": "package",
+    "title": "Bulk Packaging & Logistics",
+    "desc": "Drums, totes, flexitanks, and bulk vessel delivery. Hazmat logistics included.",
+    "href": "/services/logistics/"
+  },
+  {
+    "icon": "shield",
+    "title": "Regulatory & Compliance Support",
+    "desc": "EPA, FDA food-contact, FIFRA inerts, OMRI listings \u2014 we help you navigate requirements",
+    "href": "/services/regulatory/"
+  },
+  {
+    "icon": "truck",
+    "title": "Multi-Site Delivery Programs",
+    "desc": "Scheduled deliveries to multiple locations \u2014 blending plants, formulation sites, farms",
+    "href": "/services/delivery/"
+  },
+  {
+    "icon": "clock",
+    "title": "Emergency & Spot Sourcing",
+    "desc": "Urgent requirements, shortage mitigation, and spot-buy from global inventory",
+    "href": "/services/spot-sourcing/"
+  }
+];
+
+
+function renderDoorA(segment) {
+  const tiles = doorA[segment] || [];
+  document.getElementById('doorATiles').innerHTML = tiles.map(t => `
+    <a class="tile-card" href="${t.href}">
+      <div class="t-title">${t.title}</div>
+      <div class="t-desc">${t.desc}</div>
+      <div class="t-action">View solutions ${ARROW}</div>
+    </a>`).join('');
+}
+
+function renderDoorB(segment) {
+  const tiles = doorB[segment] || [];
+  document.getElementById('doorBTiles').innerHTML = tiles.map(t => {
+    const bc = t.badge === 'Available' ? 'badge-available' : 'badge-sourcing';
+    const bl = t.badge === 'Available' ? '\u25cf Available' : '\u25cf Sourcing-only';
+    const n = t.chems ? t.chems.length : 0;
+    const preview = t.chems ? t.chems.slice(0,3).map(c => `<span style="font-family:var(--mono);font-size:10px;color:var(--text-muted);display:block;padding:1px 0">${c.name} <span style="color:var(--border)">${c.cas}</span></span>`).join('') : '';
+    const more = n > 3 ? `<span style="font-size:10px;color:var(--text-muted)">+ ${n-3} more</span>` : '';
+    return `
+    <a class="family-card" href="${t.href}">
+      <div class="f-badge ${bc}">${bl}</div>
+      <div class="f-name">${t.title}</div>
+      <div class="f-purpose">${t.desc}</div>
+      <div class="f-roles">${t.roles.map(r => `<span class="chip">${r}</span>`).join('')}</div>
+      ${n ? `<div style="padding:8px 0 12px;border-top:1px solid var(--border-light);margin-top:4px"><div style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px">${n} Chemistries</div>${preview}${more}</div>` : ''}
+      <div class="f-action">View family ${ARROW}</div>
+    </a>`;
+  }).join('');
+}
+
+const PROC_ICONS = {
+  shield: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  check: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>',
+  package: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+  truck: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+  clock: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  search: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>',
+};
+
+function renderDoorC() {
+  document.getElementById('doorCTiles').innerHTML = doorC.map(t => `
+    <a class="proc-card" href="${t.href}">
+      <div class="proc-icon-wrap">${PROC_ICONS[t.icon]}</div>
+      <h4>${t.title}</h4>
+      <p>${t.desc}</p>
+      <div class="proc-action">Get started \u2192</div>
+    </a>`).join('');
+}
+
+function switchSegment(door, segment) {
+  const tid = door === 'A' ? 'segToggleA' : 'segToggleB';
+  document.querySelectorAll(`#${tid} .seg-btn`).forEach(b => b.classList.toggle('active', b.dataset.segment === segment));
+  if (door === 'A') renderDoorA(segment);
+  if (door === 'B') renderDoorB(segment);
+}
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const t = document.getElementById('panel-' + tabId);
+  if (t) { t.classList.add('active'); document.querySelector('.tab-bar').scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+
+function toggleAdvanced() {
+  document.getElementById('advToggle').classList.toggle('open');
+  document.getElementById('advFields').classList.toggle('show');
+}
+
+renderDoorA('row_field');
+renderDoorB('row_field');
+renderDoorC();
+</script>
+</body>
+</html>
